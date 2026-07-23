@@ -1,1 +1,20 @@
 summary_metric,value,notes
+paper_assessment_window,2022-10_to_2022-11,The original paper states that the systematic examination was conducted between late October and mid-November 2022.
+paper_summary_date,2022-11,Table 1 in the paper summarizes implementation as of November 2022.
+overall_implemented_pct,27,Table 1 in the paper.
+overall_unknown_pct,58,Table 1 in the paper.
+overall_not_implemented_pct,16,Table 1 in the paper.
+overall_requirements_count,45,The paper reports 45 legal requirements in scope for the overall assessment.
+overall_implemented_count,11,The paper reports that 11 of 45 requirements were implemented.
+overall_unknown_count,26,The paper reports that 26 of 45 requirements could not be confirmed as implemented or not implemented.
+overall_not_implemented_count,7,The paper reports that 7 of 45 requirements were not implemented by the deadline.
+ai_leadership_order_implemented_pct,39,Table 1 in the paper.
+ai_leadership_order_unknown_pct,57,Table 1 in the paper.
+ai_leadership_order_not_implemented_pct,4,Table 1 in the paper.
+trustworthy_ai_order_implemented_pct,13,Table 1 in the paper.
+trustworthy_ai_order_unknown_pct,75,Table 1 in the paper.
+trustworthy_ai_order_not_implemented_pct,13,Table 1 in the paper.
+ai_in_government_act_implemented_pct,17,Table 1 in the paper.
+ai_in_government_act_unknown_pct,17,Table 1 in the paper.
+ai_in_government_act_not_implemented_pct,67,Table 1 in the paper.
+note_future_deadline_exclusion,EO13960_section_5c_ii_excluded,The paper excludes one Trustworthy AI Order requirement from the overall assessment because its deadline had not yet passed.

@@ -1,7 +1,5 @@
-# Add pinned dependencies after the repository initialization checkpoint.
-# Likely packages:
-# pandas
-# numpy
-# matplotlib
-# seaborn
-# jupyter
+pandas>=2.2,<3.0
+matplotlib>=3.9,<4.0
+seaborn>=0.13,<0.14
+jupyter>=1.1,<2.0
+nbformat>=5.10,<6.0
