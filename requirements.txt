@@ -1,0 +1,7 @@
+# Add pinned dependencies after the repository initialization checkpoint.
+# Likely packages:
+# pandas
+# numpy
+# matplotlib
+# seaborn
+# jupyter
