@@ -1,5 +1,5 @@
-assessment_date,instrument,implemented_pct,unknown_pct,not_implemented_pct,notes
-2022-11,AI Leadership Order,39,57,4,Paper Table 1 summary as of November 2022.
-2022-11,Trustworthy AI Order,13,75,13,Paper Table 1 summary as of November 2022.
-2022-11,AI in Government Act,17,17,67,Paper Table 1 summary as of November 2022.
-2022-11,Total,27,58,16,Paper Table 1 summary as of November 2022.
+instrument,total_requirements,implemented_count,unknown_count,not_implemented_count,implemented_pct,unknown_pct,not_implemented_pct,notes
+EO 13859,23,9,13,1,39,57,4,Generated from original_requirements.csv
+EO 13960,16,2,12,2,13,75,13,Generated from original_requirements.csv
+AI in Government Act,6,1,1,4,17,17,67,Generated from original_requirements.csv
+Total,45,12,26,7,27,58,16,"Generated from the 45-row original replication dataset. This appendix-derived count yields 12 implemented requirements, which differs from one sentence in Section 5 of the paper that states 11 implemented."

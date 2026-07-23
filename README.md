@@ -39,9 +39,9 @@ This repository is being built in two layers:
 The repository currently includes:
 
 - `data/raw/source_documents_log.csv` for logging the paper and official policy sources
-- `data/raw/original_requirements.csv` for extracting requirement-level observations from the paper
+- `data/raw/original_requirements.csv` with the 45-row original replication baseline
 - `data/processed/requirements_coded_2026.csv` for the updated coded dataset
-- `data/processed/implementation_status_summary.csv` for top-line summary metrics
+- `data/processed/implementation_status_summary.csv` generated from the 45-row baseline
 
 ## Methodology
 
@@ -77,11 +77,12 @@ That means the update phase must distinguish between:
 Current progress:
 
 - Source log seeded with the core paper and official policy documents
-- Original paper summary metrics captured in machine-readable form
+- Original 45-row requirement-level dataset extracted from the appendix tracker
+- Original paper summary metrics regenerated from the requirement-level dataset
 - Reproducible analysis scaffolding added in `src/` and `notebooks/`
-- Initial chart generation workflow prepared
+- Original-status chart regenerated from the dataset-derived summary
 
-The main findings section will be expanded as the requirement-level dataset is built.
+The 2026 coding pass has **not** started yet. The repository is intentionally paused at the validated original-replication baseline.
 
 ## Limitations
 

@@ -12,10 +12,9 @@ Expected fields:
 - `source_policy`
 - `requirement_text`
 - `responsible_entity`
-- `requirement_type`
 - `deadline`
 - `original_status`
-- `paper_evidence_notes`
+- `original_evidence_notes`
 
 ### `source_documents_log.csv`
 
@@ -62,7 +61,19 @@ Expected fields:
 
 Summary metrics used for charts and reporting.
 
-This file currently stores the original paper's top-line implementation summary so that the first analysis notebook and initial figure can be reproduced before the full requirement dataset is completed.
+This file is now generated directly from `original_requirements.csv`.
+
+Expected fields:
+
+- `instrument`
+- `total_requirements`
+- `implemented_count`
+- `unknown_count`
+- `not_implemented_count`
+- `implemented_pct`
+- `unknown_pct`
+- `not_implemented_pct`
+- `notes`
 
 ### `agency_inventory_status.csv`
 

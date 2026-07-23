@@ -24,7 +24,8 @@ The update phase will use publicly available evidence from official federal sour
 Current status:
 
 - Core source documents have been logged.
-- The original paper's top-line summary has been captured in machine-readable form.
+- The original 45-row requirement-level baseline has been extracted into `data/raw/original_requirements.csv`.
+- The original-status summary and chart are now generated from that dataset rather than from seeded values.
 - The repository now contains reusable helpers for validation and chart generation.
 
 ## Interpretation
@@ -37,4 +38,4 @@ The project depends on public evidence and will likely under-observe internal ac
 
 ## Next Steps
 
-The next implementation step is to extract the original requirement-level tracker into `data/raw/original_requirements.csv` and begin coding the July 2026 update row by row.
+The next implementation step is to begin the July 2026 coding pass row by row. That work has not started yet.
