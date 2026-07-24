@@ -24,13 +24,23 @@ The update phase will use publicly available evidence from official federal sour
 Current status:
 
 - Core source documents have been logged.
-- The original 45-row requirement-level baseline has been extracted into `data/raw/original_requirements.csv`.
+- The full appendix tracker has been reconstructed at 46 rows, including the excluded `EO13960 §5(c)(ii)` row.
+- The counted baseline is 45 included requirements after applying the paper's own exclusion logic.
 - The original-status summary and chart are now generated from that dataset rather than from seeded values.
 - The repository now contains reusable helpers for validation and chart generation.
 
 ## Interpretation
 
 The first wave of work focuses on reproducibility and auditability, so that later policy judgments rest on a traceable dataset rather than ad hoc notes.
+
+## Validation Note
+
+The reconciliation task surfaced two distinct issues:
+
+1. The exact appendix row mentioned in footnote 8, `EO13960 §5(c)(ii)`, was missing from the earlier extraction and is now restored.
+2. Once that row is restored and excluded from the counted baseline, the dataset reproduces **12 implemented, 26 unknown, and 7 not implemented** across 45 counted requirements.
+
+That means the paper's narrative sentence reporting **11 implemented** does not appear to be caused by the appendix row structure. The repository therefore treats the `11` count as a documented narrative inconsistency in the paper rather than forcing the row-level data to match it silently.
 
 ## Limitations
 

@@ -39,7 +39,7 @@ This repository is being built in two layers:
 The repository currently includes:
 
 - `data/raw/source_documents_log.csv` for logging the paper and official policy sources
-- `data/raw/original_requirements.csv` with the 45-row original replication baseline
+- `data/raw/original_requirements.csv` with the full appendix tracker plus counted-baseline flags
 - `data/processed/requirements_coded_2026.csv` for the updated coded dataset
 - `data/processed/implementation_status_summary.csv` generated from the 45-row baseline
 
@@ -77,12 +77,28 @@ That means the update phase must distinguish between:
 Current progress:
 
 - Source log seeded with the core paper and official policy documents
-- Original 45-row requirement-level dataset extracted from the appendix tracker
+- Original appendix tracker reconstructed at 46 rows, including the explicitly excluded `EO13960 §5(c)(ii)` row
+- Counted baseline regenerated at 45 included requirements using `aggregate_count_included`
 - Original paper summary metrics regenerated from the requirement-level dataset
 - Reproducible analysis scaffolding added in `src/` and `notebooks/`
 - Original-status chart regenerated from the dataset-derived summary
 
 The 2026 coding pass has **not** started yet. The repository is intentionally paused at the validated original-replication baseline.
+
+## Validation Note
+
+The paper contains a small but important internal inconsistency.
+
+- The appendix tracker structure supports **46 tracker rows**.
+- Footnote 8 explicitly excludes `EO13960 §5(c)(ii)` from the aggregate baseline because its deadline had not yet passed.
+- After applying that exclusion, the counted baseline is **45 requirements** and reproduces **12 implemented, 26 unknown, and 7 not implemented**.
+- The paper's narrative sentence in Section 5 says **11 implemented**, but that value does not match the appendix-derived baseline or the percentages shown in Table 1.
+
+To keep the project transparent, the dataset preserves:
+
+- the appendix-facing status in `appendix_status`,
+- the counted-baseline logic in `aggregate_count_included`,
+- and the published prose count as a documented paper-level inconsistency rather than a silent data override.
 
 ## Limitations
 

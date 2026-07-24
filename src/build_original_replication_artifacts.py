@@ -1,7 +1,7 @@
 """Build the original requirement-level replication dataset and summary artifacts.
 
 This script encodes the paper's original requirement-level tracker as a structured
-45-row dataset for the replication baseline. It intentionally stops at the
+46-row appendix dataset with a 45-requirement counted baseline. It intentionally stops at the
 original-status phase and does not perform any 2026 update coding.
 """
 
@@ -16,7 +16,7 @@ from data_cleaning import project_path, save_csv
 from visualization_helpers import plot_policy_status_breakdown, save_figure
 
 
-STATUS_ORDER = ["Implemented", "Unknown", "Not implemented"]
+STATUS_ORDER = ["Implemented", "Unknown", "Not implemented", "Excluded"]
 POLICY_ORDER = ["EO 13859", "EO 13960", "AI in Government Act"]
 
 
@@ -26,7 +26,7 @@ def round_half_up(value: float) -> int:
 
 
 def build_original_requirements() -> pd.DataFrame:
-    """Return the structured 45-row original replication dataset."""
+    """Return the structured appendix tracker plus counted baseline metadata."""
     rows = [
         {
             "requirement_id": "EO13859_2a_e",
@@ -40,6 +40,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "Implementing agencies",
             "deadline": "None",
             "original_status": "Unknown",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper classifies this as an ongoing requirement without mandated "
                 "outcomes to assess, so implementation was not publicly verifiable."
@@ -56,6 +57,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "Heads of AI R&D agencies",
             "deadline": "None",
             "original_status": "Implemented",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper cites the National Artificial Intelligence Research and "
                 "Development Strategic Plan: 2019 Update and subsequent progress "
@@ -73,6 +75,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "Heads of AI R&D agencies",
             "deadline": "None",
             "original_status": "Implemented",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper treats this as an ongoing requirement with indications of "
                 "sustained implementation through NITRD budget and planning materials."
@@ -89,6 +92,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "Heads of AI R&D agencies",
             "deadline": "Annually within 90 days of enactment of appropriations for an agency",
             "original_status": "Implemented",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper points to NITRD supplements and the AI R&D dashboard as "
                 "evidence that these annual reporting expectations were being carried out."
@@ -105,6 +109,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "Heads of AI R&D agencies",
             "deadline": "None",
             "original_status": "Unknown",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper classifies this as an ongoing requirement without mandated "
                 "outcomes to assess."
@@ -122,6 +127,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "Head of all agencies",
             "deadline": "None",
             "original_status": "Unknown",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper treats this as open-ended and not publicly verifiable, while "
                 "noting partial supporting infrastructure such as the AI Researchers Portal."
@@ -138,6 +144,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "OMB Director",
             "deadline": "Within 90 days of EO",
             "original_status": "Implemented",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper cites the July 10, 2019 Federal Register request for "
                 "information on priority access or quality improvements for Federal "
@@ -155,6 +162,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "OMB Director with NSTC Select Committee on AI",
             "deadline": "Within 90 days of EO",
             "original_status": "Implemented",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper treats the Federal Data Strategy 2020 Action Plan and its "
                 "tracking of the RFI milestone as evidence that this directive was implemented."
@@ -171,6 +179,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "OMB with interagency councils and NSTC Select Committee on AI",
             "deadline": "Within 120 days of EO",
             "original_status": "Unknown",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper found references to a non-final guidance document but no "
                 "clear public confirmation that final updated guidance had been issued."
@@ -187,6 +196,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "Agencies",
             "deadline": "Within 180 days of EO",
             "original_status": "Unknown",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper notes references in agency open data planning materials but "
                 "found no mandated public reporting that would verify implementation."
@@ -208,6 +218,7 @@ def build_original_requirements() -> pd.DataFrame:
             ),
             "deadline": "None",
             "original_status": "Unknown",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper treats this as open-ended and not publicly verifiable."
             ),
@@ -224,6 +235,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "Agencies",
             "deadline": "None",
             "original_status": "Unknown",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper classifies this as an ongoing requirement without mandated "
                 "public reporting or a concrete outcome to assess."
@@ -244,6 +256,7 @@ def build_original_requirements() -> pd.DataFrame:
             ),
             "deadline": "None",
             "original_status": "Implemented",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper cites the National AI Initiative Office's AI Researchers Portal "
                 "and its federally supported computing infrastructure resources overview."
@@ -260,6 +273,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "NSTC Select Committee on AI in coordination with GSA",
             "deadline": "Within 180 days of EO",
             "original_status": "Implemented",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper cites the November 17, 2020 recommendations report and a July "
                 "2022 lessons-learned report, noting that the original deadline was missed "
@@ -277,6 +291,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "NSTC Select Committee on AI",
             "deadline": "None",
             "original_status": "Unknown",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper treats this as an ongoing requirement without a mandated outcome."
             ),
@@ -296,6 +311,7 @@ def build_original_requirements() -> pd.DataFrame:
             ),
             "deadline": "Within 180 days of EO",
             "original_status": "Implemented",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper cites the January 2020 draft request for comments and the "
                 "final OMB M-21-06 memorandum issued on November 17, 2020."
@@ -312,6 +328,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "Implementing agencies with regulatory authorities",
             "deadline": "Within 180 days of OMB memorandum",
             "original_status": "Not implemented",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper marks this as not implemented and points to the poor publication "
                 "rate of Agency AI Plans discussed in Section 6 and Appendix B."
@@ -328,6 +345,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "Secretary of Commerce through the NIST Director",
             "deadline": "Within 180 days of EO",
             "original_status": "Implemented",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper cites NIST's August 2019 report, A Plan for Federal Engagement "
                 "in Developing AI Technical Standards and Related Tools."
@@ -344,6 +362,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "Implementing agencies that provide educational grants",
             "deadline": "Annually",
             "original_status": "Unknown",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper found no mandated public reporting that would verify the status "
                 "of this ongoing annual requirement."
@@ -360,6 +379,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "NSTC Select Committee on AI",
             "deadline": "Within 90 days of EO",
             "original_status": "Unknown",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper found no mandated public reporting that would verify whether the "
                 "recommendations had been delivered."
@@ -375,6 +395,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "NSTC Select Committee on AI",
             "deadline": "None",
             "original_status": "Unknown",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper treats this as an ongoing requirement without mandated public reporting."
             ),
@@ -394,6 +415,7 @@ def build_original_requirements() -> pd.DataFrame:
             ),
             "deadline": "Within 120 days of EO",
             "original_status": "Unknown",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper found no public confirmation of the action plan and notes that "
                 "the associated national security memorandum may itself not have been issued publicly."
@@ -409,6 +431,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "Agencies that are recipients of the action plan",
             "deadline": "Within 120 days of EO",
             "original_status": "Unknown",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper found no mandated public reporting that would verify implementation."
             ),
@@ -424,6 +447,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "Responsible agencies as defined in section 8",
             "deadline": "None",
             "original_status": "Unknown",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper notes example agency documents that suggest implementation, but "
                 "classifies the overall ongoing requirement as not publicly verifiable."
@@ -440,6 +464,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "OMB and agencies",
             "deadline": "None",
             "original_status": "Unknown",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper treats this as an ongoing requirement without a mandated public outcome."
             ),
@@ -455,6 +480,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "OMB Director in coordination with key stakeholders",
             "deadline": "Within 180 days of EO",
             "original_status": "Not implemented",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper found no public roadmap that matched this requirement, despite "
                 "related milestones in the 2021 Federal Data Strategy Action Plan."
@@ -471,6 +497,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "Agencies and OMB",
             "deadline": "None",
             "original_status": "Unknown",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper classifies this as an ongoing requirement without mandated public reporting."
             ),
@@ -487,6 +514,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "Federal CIO Council in coordination with interagency bodies",
             "deadline": "Within 60 days of EO",
             "original_status": "Implemented",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper cites the CIO Council's 2021 guidance, FAQ materials, example "
                 "scenarios, and template for agency AI use case inventories."
@@ -503,6 +531,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "Responsible agencies",
             "deadline": "Within 180 days of CIO Council guidance; annually thereafter",
             "original_status": "Unknown",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper treats this requirement as separate from the public disclosure "
                 "requirement in section 5(e) and finds no mandated public reporting on status."
@@ -519,6 +548,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "Responsible agencies",
             "deadline": "None",
             "original_status": "Unknown",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper classifies this as open-ended and not publicly verifiable apart "
                 "from the more specific follow-on requirements in sections 5(c)(i) and 5(c)(ii)."
@@ -535,9 +565,28 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "Responsible agencies",
             "deadline": "Within 120 days of completing AI inventory",
             "original_status": "Unknown",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper found no mandated public reporting that would verify completion "
                 "of these plans."
+            ),
+        },
+        {
+            "requirement_id": "EO13960_5c_ii",
+            "source_policy": "EO 13960",
+            "requirement_text": (
+                "Agencies shall strive to implement the approved plans for AI applications, "
+                "subject to existing resource levels and in coordination with the Agency Data "
+                "Governance Body and relevant officials."
+            ),
+            "responsible_entity": "Responsible agencies",
+            "deadline": "Within 180 days of plan approval",
+            "original_status": "Excluded",
+            "aggregate_count_included": "No",
+            "original_evidence_notes": (
+                "The appendix labels this row as 'Not implemented, but not past deadline'. "
+                "Footnote 8 in the paper states that it was excluded from the overall "
+                "implementation assessment because the deadline had not yet passed."
             ),
         },
         {
@@ -551,6 +600,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "Responsible agencies; CIO Council; Chief Data Officer Council",
             "deadline": "Within 60 days of completing AI inventory",
             "original_status": "Unknown",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper found no mandated public reporting that would verify whether "
                 "interagency sharing had taken place."
@@ -566,6 +616,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "Responsible agencies",
             "deadline": "Within 120 days of completing AI inventory",
             "original_status": "Not implemented",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper marks this as not implemented overall and notes that only a "
                 "minority of inventories had been publicly posted at the time of assessment."
@@ -582,6 +633,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "Responsible agencies",
             "deadline": "None",
             "original_status": "Unknown",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper treats this as an ongoing requirement without a mandated outcome to assess."
             ),
@@ -596,6 +648,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "Federal CIO Council",
             "deadline": "Within 45 days of EO",
             "original_status": "Unknown",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper found no mandated public reporting that would verify publication "
                 "of the required list."
@@ -612,6 +665,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "Presidential Innovation Fellows program (GSA)",
             "deadline": "Within 90 days of EO",
             "original_status": "Implemented",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper notes that the 2022 Presidential Innovation Fellows application "
                 "included a Data Strategy and AI track, treating the requirement as implemented."
@@ -628,6 +682,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "OPM in coordination with GSA and relevant agencies",
             "deadline": "Within 45 days of EO",
             "original_status": "Unknown",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper found no mandated public reporting that would verify completion "
                 "of the inventory."
@@ -643,6 +698,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "OPM",
             "deadline": "Within 180 days of creating inventory under section 7(b)",
             "original_status": "Unknown",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper found no public report matching the EO's specific recommendation "
                 "requirement, even though broader workforce priority materials existed."
@@ -659,6 +715,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "Responsible agencies",
             "deadline": "Within 30 days of EO",
             "original_status": "Unknown",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper found no mandated public reporting that would verify designation "
                 "of the responsible officials."
@@ -676,6 +733,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "GSA",
             "deadline": "None",
             "original_status": "Implemented",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper cites the Artificial Intelligence Center of Excellence, its "
                 "services catalog, and the published AI Guide for Government."
@@ -693,6 +751,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "GSA AI Center of Excellence",
             "deadline": "None",
             "original_status": "Unknown",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper classifies most of these duties as ongoing requirements without "
                 "mandated outcomes to assess, while noting partial examples of activity."
@@ -714,6 +773,7 @@ def build_original_requirements() -> pd.DataFrame:
                 "than 270 days after enactment"
             ),
             "original_status": "Not implemented",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper marks both the draft and final memorandum requirement as not implemented "
                 "as of the 2022 assessment window."
@@ -730,6 +790,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "Heads of agencies",
             "deadline": "No later than 180 days after OMB issues memorandum",
             "original_status": "Not implemented",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper marks this as not implemented because the required OMB memorandum "
                 "had not been issued and corresponding agency plans had not been posted."
@@ -746,6 +807,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "OPM Director",
             "deadline": "Not later than 18 months after enactment",
             "original_status": "Not implemented",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper marks the workforce and occupational series requirement as not implemented."
             ),
@@ -760,6 +822,7 @@ def build_original_requirements() -> pd.DataFrame:
             "responsible_entity": "OPM Director",
             "deadline": "Not later than 120 days after enactment",
             "original_status": "Not implemented",
+            "aggregate_count_included": "Yes",
             "original_evidence_notes": (
                 "The paper marks the required congressional plan as not implemented."
             ),
@@ -768,14 +831,45 @@ def build_original_requirements() -> pd.DataFrame:
 
     dataframe = pd.DataFrame(rows)
     dataframe["deadline"] = dataframe["deadline"].replace({"None": "No fixed deadline"})
+    dataframe["appendix_status"] = dataframe["original_status"]
+    dataframe["aggregate_status"] = dataframe["original_status"]
+    dataframe["validation_note"] = ""
 
-    if len(dataframe) != 45:
-        raise ValueError(f"Expected 45 requirements, found {len(dataframe)}")
+    excluded_mask = dataframe["requirement_id"] == "EO13960_5c_ii"
+    dataframe.loc[
+        excluded_mask,
+        "appendix_status",
+    ] = "Not implemented, but not past deadline"
+    dataframe.loc[
+        excluded_mask,
+        "validation_note",
+    ] = (
+        "This is the exact appendix row that footnote 8 says was excluded from the overall "
+        "implementation assessment because its deadline had not yet passed. Restoring this row "
+        "to the appendix tracker yields 46 tracker rows overall, with 45 counted requirements "
+        "after exclusion. The counted baseline reproduces 12 implemented, 26 unknown, and "
+        "7 not implemented. The remaining 11-versus-12 discrepancy is therefore a narrative "
+        "inconsistency in the paper's prose rather than a row-level extraction issue."
+    )
+
+    dataframe.loc[
+        ~excluded_mask,
+        "validation_note",
+    ] = (
+        "Included in the counted appendix-derived baseline. After restoring the excluded "
+        "EO13960 section 5(c)(ii) row, the aggregate baseline reproduces 12 implemented, "
+        "26 unknown, and 7 not implemented. The paper's sentence reporting 11 implemented "
+        "is therefore treated as a documented narrative inconsistency rather than a row-level "
+        "error for this requirement."
+    )
+
+    if len(dataframe) != 46:
+        raise ValueError(f"Expected 46 appendix tracker rows, found {len(dataframe)}")
 
     per_policy_counts = dataframe["source_policy"].value_counts().to_dict()
     expected_policy_counts = {
         "EO 13859": 23,
-        "EO 13960": 16,
+        "EO 13960": 17,
         "AI in Government Act": 6,
     }
     if per_policy_counts != expected_policy_counts:
@@ -788,17 +882,29 @@ def build_original_requirements() -> pd.DataFrame:
     return dataframe
 
 
-def build_summary(requirements: pd.DataFrame) -> pd.DataFrame:
-    """Aggregate policy-level status counts and percentages from the requirement dataset."""
+def _build_summary_rows(
+    requirements: pd.DataFrame,
+    *,
+    summary_basis: str,
+    status_column: str,
+    notes: str,
+) -> list[dict[str, object]]:
+    """Aggregate policy-level status counts and percentages from a chosen status column."""
     summary_rows = []
 
     for policy in POLICY_ORDER:
-        subset = requirements.loc[requirements["source_policy"] == policy]
-        counts = subset["original_status"].value_counts().to_dict()
+        policy_subset = requirements.loc[requirements["source_policy"] == policy]
+        tracker_rows = len(policy_subset)
+        excluded_count = int((policy_subset[status_column] == "Excluded").sum())
+        subset = policy_subset.loc[policy_subset[status_column] != "Excluded"]
+        counts = subset[status_column].value_counts().to_dict()
         total = len(subset)
         summary_rows.append(
             {
+                "summary_basis": summary_basis,
                 "instrument": policy,
+                "tracker_rows": tracker_rows,
+                "excluded_count": excluded_count,
                 "total_requirements": total,
                 "implemented_count": counts.get("Implemented", 0),
                 "unknown_count": counts.get("Unknown", 0),
@@ -808,15 +914,21 @@ def build_summary(requirements: pd.DataFrame) -> pd.DataFrame:
                 "not_implemented_pct": round_half_up(
                     counts.get("Not implemented", 0) / total * 100
                 ),
-                "notes": "Generated from original_requirements.csv",
+                "notes": notes,
             }
         )
 
-    counts = requirements["original_status"].value_counts().to_dict()
-    total = len(requirements)
+    tracker_rows = len(requirements)
+    excluded_count = int((requirements[status_column] == "Excluded").sum())
+    total_subset = requirements.loc[requirements[status_column] != "Excluded"]
+    counts = total_subset[status_column].value_counts().to_dict()
+    total = len(total_subset)
     summary_rows.append(
         {
+            "summary_basis": summary_basis,
             "instrument": "Total",
+            "tracker_rows": tracker_rows,
+            "excluded_count": excluded_count,
             "total_requirements": total,
             "implemented_count": counts.get("Implemented", 0),
             "unknown_count": counts.get("Unknown", 0),
@@ -826,10 +938,62 @@ def build_summary(requirements: pd.DataFrame) -> pd.DataFrame:
             "not_implemented_pct": round_half_up(
                 counts.get("Not implemented", 0) / total * 100
             ),
+            "notes": notes,
+        }
+    )
+
+    return summary_rows
+
+
+def build_summary(requirements: pd.DataFrame) -> pd.DataFrame:
+    """Build transparent summary views for appendix, row-logic exclusion, and paper narrative."""
+    summary_rows = []
+    summary_rows.extend(
+        _build_summary_rows(
+            requirements,
+            summary_basis="appendix_all_rows",
+            status_column="aggregate_status",
+            notes=(
+                "Generated from the full appendix tracker. This tracker has 46 rows, including "
+                "EO13960 section 5(c)(ii), which the paper explicitly excludes from the aggregate "
+                "baseline because its deadline had not yet passed. After that exclusion, the "
+                "counted baseline reproduces 12 implemented, 26 unknown, and 7 not implemented "
+                "across 45 counted requirements."
+            ),
+        )
+    )
+    summary_rows.extend(
+        _build_summary_rows(
+            requirements.loc[requirements["aggregate_count_included"] == "Yes"].copy(),
+            summary_basis="aggregate_included_rows",
+            status_column="aggregate_status",
+            notes=(
+                "Generated using the paper's explicit exclusion logic for EO13960 section 5(c)(ii), "
+                "which footnote 8 says should be excluded because its deadline had not yet passed. "
+                "This reproduces the counted baseline of 12 implemented, 26 unknown, and 7 not "
+                "implemented across 45 included requirements."
+            ),
+        )
+    )
+    summary_rows.append(
+        {
+            "summary_basis": "paper_published_narrative",
+            "instrument": "Total",
+            "tracker_rows": 46,
+            "excluded_count": 1,
+            "total_requirements": 45,
+            "implemented_count": 11,
+            "unknown_count": 26,
+            "not_implemented_count": 7,
+            "implemented_pct": 27,
+            "unknown_pct": 58,
+            "not_implemented_pct": 16,
             "notes": (
-                "Generated from the 45-row original replication dataset. This appendix-derived "
-                "count yields 12 implemented requirements, which differs from one sentence in "
-                "Section 5 of the paper that states 11 implemented."
+                "Published narrative summary from Section 5 of the paper: 11 implemented, 26 unknown, "
+                "7 not implemented. After restoring the excluded EO13960 section 5(c)(ii) row and "
+                "applying the paper's stated exclusion logic, the counted appendix baseline reproduces "
+                "12/26/7 rather than 11/26/7. This row is therefore retained as a documented narrative "
+                "inconsistency in the paper."
             ),
         }
     )
@@ -865,8 +1029,12 @@ def main() -> None:
     save_csv(summary, table_output)
     save_csv(requirements, requirement_table_output)
 
+    chart_summary = summary.loc[
+        summary["summary_basis"] == "aggregate_included_rows",
+        ["instrument", "implemented_pct", "unknown_pct", "not_implemented_pct"],
+    ]
     figure = plot_policy_status_breakdown(
-        summary[["instrument", "implemented_pct", "unknown_pct", "not_implemented_pct"]],
+        chart_summary,
         "Original Paper Summary of Federal AI Governance Implementation",
     )
     save_figure(figure, figure_output)

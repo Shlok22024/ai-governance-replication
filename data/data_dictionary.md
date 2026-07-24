@@ -14,7 +14,18 @@ Expected fields:
 - `responsible_entity`
 - `deadline`
 - `original_status`
+- `aggregate_count_included`
 - `original_evidence_notes`
+- `appendix_status`
+- `aggregate_status`
+- `validation_note`
+
+Notes:
+
+- The appendix tracker contains 46 rows.
+- The counted baseline contains 45 included requirements because `EO13960 §5(c)(ii)` is explicitly excluded by the paper's footnote 8.
+- `appendix_status` preserves the tracker-facing label.
+- `aggregate_count_included` and `aggregate_status` preserve the counted-baseline logic used for the summary.
 
 ### `source_documents_log.csv`
 
@@ -65,7 +76,10 @@ This file is now generated directly from `original_requirements.csv`.
 
 Expected fields:
 
+- `summary_basis`
 - `instrument`
+- `tracker_rows`
+- `excluded_count`
 - `total_requirements`
 - `implemented_count`
 - `unknown_count`
@@ -74,6 +88,12 @@ Expected fields:
 - `unknown_pct`
 - `not_implemented_pct`
 - `notes`
+
+Notes:
+
+- `appendix_all_rows` shows the appendix tracker with the excluded row explicitly tracked.
+- `aggregate_included_rows` shows the 45-requirement counted baseline used for replication.
+- `paper_published_narrative` stores the paper's prose claim of `11 implemented, 26 unknown, 7 not implemented`, which does not match the appendix-derived counted baseline.
 
 ### `agency_inventory_status.csv`
 
