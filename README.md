@@ -1,10 +1,12 @@
-# Replication and July 24, 2026 Update of U.S. Federal AI Governance Implementation
+# Phase 1 MVP: Replication and July 24, 2026 Update of U.S. Federal AI Governance Implementation
 
 ## Overview
 
 This repository contains a replication-focused portfolio project based on:
 
 **Lawrence, Cui, and Ho (2023). _The Bureaucratic Challenge to AI Governance: An Empirical Assessment of Implementation at U.S. Federal Agencies_.**
+
+This repository is **Phase 1 MVP**, not a full end-to-end replication of every part of the original paper.
 
 The project has two linked goals:
 
@@ -31,7 +33,7 @@ The authors used public materials gathered in late October through mid-November 
 
 This repository is structured in two layers:
 
-- A **weekend MVP** that reproduces the original baseline and completes a traceable July 24, 2026 coding pass
+- A **Phase 1 MVP** that reproduces the original baseline and completes a traceable July 24, 2026 coding pass
 - An **optional full replication extension** that can later expand into deeper agency-level tracking and validation
 
 ## Data
@@ -95,7 +97,7 @@ Current progress:
 
 ## July 24, 2026 Findings
 
-Using the same 45 counted baseline requirements as the original paper, the update finds:
+Using the same 45 counted baseline requirements as the original paper, the audited update finds that the current public record supports:
 
 - `12` implemented (`26.7%`)
 - `8` partially implemented (`17.8%`)
@@ -109,6 +111,13 @@ Interpretation:
 - After the row audit, more of the tracker is intentionally held at `Unable to verify` because the public evidence is broad, indirect, or not requirement-specific enough to support stronger coding.
 - Only one counted baseline row remains in `Superseded or replaced` after the audit applied a stricter standard for formal replacement or absorption.
 - The confidence mix remains intentionally cautious across the 45 counted requirements: `7` high-confidence rows, `14` medium-confidence rows, and `24` low-confidence rows.
+
+## How to Interpret the Results
+
+- `Implemented` means public evidence directly supports completion of the requirement.
+- `Partially implemented` means public evidence supports some but not all components of the requirement.
+- `Unable to verify` means the public evidence reviewed here was insufficient. It does **not** necessarily mean the work was not done.
+- `Superseded or replaced` means a later policy clearly replaced or absorbed the original requirement.
 
 ## Audit Note
 

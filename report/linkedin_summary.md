@@ -1,9 +1,25 @@
-# LinkedIn Summary
+# LinkedIn Post
 
-I started building a replication project around one of the strongest empirical papers in AI governance that I found: Lawrence, Cui, and Ho's 2023 study of how well U.S. federal agencies actually implemented binding AI governance requirements.
+This weekend I published Phase 1 of a portfolio project on AI governance replication.
 
-The project goal is not just to restate the paper. I'm recreating the core implementation-status results in a reproducible repo and then extending the analysis with a July 2026 update using public federal sources.
+I rebuilt the requirement-level baseline from Lawrence, Cui, and Ho's 2023 paper on U.S. federal AI governance implementation, then extended it with a July 24, 2026 public-evidence update.
 
-What makes this interesting to me is that it sits right at the intersection of data analysis, policy research, transparency, and AI governance. The original paper's headline finding was already striking: fewer than 40% of the tracked legal requirements could be publicly verified as implemented.
+The key point is not "agencies definitely failed" or "agencies definitely complied." The project is really about **public verifiability**:
 
-Next up is the hardest and most interesting part: building the requirement-level dataset and tracing what changed in the federal AI policy environment through 2026.
+- `Implemented` means public evidence directly supports completion.
+- `Partially implemented` means public evidence supports some but not all parts of a requirement.
+- `Unable to verify` means the public record was insufficient, not necessarily that the work was not done.
+- `Superseded or replaced` means a later policy clearly absorbed the original requirement.
+
+After a row-level audit, the Phase 1 MVP finds that across the paper's 45 counted baseline requirements, the current public record supports:
+
+- 12 implemented
+- 8 partially implemented
+- 24 unable to verify
+- 1 superseded or replaced
+
+What I liked about this project is that it combines data cleaning, structured coding, policy analysis, reproducibility, and careful interpretation under uncertainty.
+
+This is Phase 1, not the full paper replication yet. The next step is expanding the project into deeper agency-level validation and a fuller replication workflow.
+
+GitHub: `ai-governance-replication`

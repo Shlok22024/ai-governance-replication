@@ -4,6 +4,8 @@
 
 This project reproduces and extends the main findings of Lawrence, Cui, and Ho's 2023 paper on U.S. federal AI governance implementation.
 
+This deliverable is a **Phase 1 MVP**, not a full replication of every component of the original paper.
+
 ## Original Paper Summary
 
 The original paper studied three major federal AI governance pillars and found that, based on public evidence available as of November 2022, only a minority of tracked legal requirements could be verified as implemented.
@@ -30,7 +32,7 @@ The July 24, 2026 coding pass is complete, and a focused row audit was applied o
 
 - The full appendix tracker remains at 46 rows, including the excluded `EO13960 section 5(c)(ii)` row.
 - The comparable baseline remains 45 counted requirements after applying the paper's own exclusion logic.
-- On that 45-row baseline, the post-audit coded update finds `12` implemented, `8` partially implemented, `24` unable to verify, and `1` superseded or replaced.
+- On that 45-row baseline, the post-audit coded update finds that public evidence supports `12` implemented requirements, `8` partially implemented requirements, `24` requirements that remain unable to verify, and `1` requirement that is clearly superseded or replaced.
 - No counted requirement is coded `Not implemented` in 2026. That does not mean every obligation is complete; it reflects the deliberate choice to avoid over-classifying weak public evidence.
 - The row audit reviewed `36` high-risk rows and downgraded `9` of them to `Unable to verify`.
 
