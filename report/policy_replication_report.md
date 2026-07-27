@@ -26,22 +26,22 @@ Two coding rules matter most:
 
 ## Findings
 
-The July 24, 2026 coding pass is complete.
+The July 24, 2026 coding pass is complete, and a focused row audit was applied on Monday, July 27, 2026.
 
 - The full appendix tracker remains at 46 rows, including the excluded `EO13960 section 5(c)(ii)` row.
 - The comparable baseline remains 45 counted requirements after applying the paper's own exclusion logic.
-- On that 45-row baseline, the coded update finds `12` implemented, `12` partially implemented, `15` unable to verify, and `6` superseded or replaced.
+- On that 45-row baseline, the post-audit coded update finds `12` implemented, `8` partially implemented, `24` unable to verify, and `1` superseded or replaced.
 - No counted requirement is coded `Not implemented` in 2026. That does not mean every obligation is complete; it reflects the deliberate choice to avoid over-classifying weak public evidence.
-- Six requirements are now better treated as superseded or replaced by later policy instruments rather than forced into the original implementation categories.
+- The row audit reviewed `36` high-risk rows and downgraded `9` of them to `Unable to verify`.
 
 ## Interpretation
 
 The update suggests a mixed picture rather than a simple success story.
 
 - Some requirements clearly moved forward, especially the guidance and workforce pieces connected to the AI in Government Act.
-- Several `Unknown` baseline rows can now be described more precisely as partially implemented.
+- Several `Unknown` baseline rows can still be described more precisely than they were in 2022, but the audit showed that some earlier partial or superseded judgments were not supported strongly enough by direct public evidence.
 - A large share of the tracker still cannot be verified conservatively from public evidence alone, which keeps transparency and observability at the center of the project.
-- Policy change also matters: by July 24, 2026, some obligations are more accurately described as superseded by `M-25-21`, `M-25-22`, or the June 5, 2026 national-security AI directive.
+- Policy change still matters, but the audit applied a stricter standard for `Superseded or replaced` and retained that label only where the newer public requirement clearly absorbed the older coordination function.
 
 ## Validation Note
 
@@ -57,6 +57,8 @@ That means the paper's narrative sentence reporting **11 implemented** does not 
 The project depends on public evidence and will likely under-observe internal actions that were not publicly disclosed.
 
 That limitation is especially important for the July 24, 2026 pass. Several rows likely reflect real implementation activity that is not yet documented cleanly enough on public-facing government pages to justify stronger coding.
+
+The July 27 audit intentionally sharpened that constraint. If the evidence was strategic, indirect, agency-specific, or merely suggestive of later policy evolution, the row was pushed back toward `Unable to verify` rather than left in a more assertive status.
 
 ## Next Steps
 

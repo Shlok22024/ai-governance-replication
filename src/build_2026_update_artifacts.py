@@ -286,14 +286,13 @@ def build_updates() -> dict[str, dict[str, str]]:
     )
     add(
         ["EO13960_5a"],
-        updated_2026_status="Partially implemented",
+        updated_2026_status="Unable to verify",
         source_key="EPA_AI_INVENTORY",
-        verification_confidence="Medium",
+        verification_confidence="Low",
         update_notes=(
-            "By 2026, agencies are clearly using common inventory/reporting structures and posting "
-            "public AI inventory data. That strongly suggests the underlying criteria/format/mechanism "
-            "requirement was operationalized, but this pass did not recover a direct public copy of the "
-            "original CIO Council artifact itself."
+            "Public agency inventory pages suggest that some common inventory conventions were "
+            "operationalized, but this pass did not locate direct public evidence of the CIO Council "
+            "criteria, format, and mechanism artifact required by the original provision."
         ),
     )
     add(
@@ -340,34 +339,35 @@ def build_updates() -> dict[str, dict[str, str]]:
     )
     add(
         ["EO13859_2a_e"],
-        updated_2026_status="Partially implemented",
+        updated_2026_status="Unable to verify",
         source_key="WHITEHOUSE_AI_GOV",
         verification_confidence="Low",
         update_notes=(
-            "The strategic objectives remain visibly active across the federal AI policy ecosystem, "
-            "including R&D, education, procurement, and infrastructure initiatives. But this broad, "
-            "multi-objective requirement still does not have a single public government-wide outcome "
-            "record that would justify coding it as fully implemented."
+            "AI.Gov shows that related federal AI priorities remain visible, but the evidence is still "
+            "too general and government-wide to verify that agencies pursued the full set of strategic "
+            "objectives in the requirement itself."
         ),
     )
     add(
         ["EO13859_5b"],
-        updated_2026_status="Partially implemented",
+        updated_2026_status="Unable to verify",
         source_key="NITRD_AI",
-        verification_confidence="Medium",
+        verification_confidence="Low",
         update_notes=(
-            "Public evidence shows continued federal coordination around AI R&D and computing resources, "
-            "but this pass does not verify named-agency prioritization decisions one by one."
+            "Public evidence shows continued federal AI R&D coordination, but it does not directly "
+            "verify that the specifically named agencies prioritized high-performance computing "
+            "allocations for AI-related applications."
         ),
     )
     add(
         ["EO13859_7a_i_ii"],
-        updated_2026_status="Partially implemented",
+        updated_2026_status="Unable to verify",
         source_key="WHITEHOUSE_AI_GOV",
         verification_confidence="Low",
         update_notes=(
             "Public federal AI education initiatives remain active, but this pass does not verify the "
-            "annual communications from each covered grantmaking agency to the NSTC Select Committee."
+            "requirement-specific annual communications from covered grantmaking agencies to the NSTC "
+            "Select Committee on AI."
         ),
     )
     add(
@@ -438,48 +438,56 @@ def build_updates() -> dict[str, dict[str, str]]:
     )
     add(
         ["EO13859_6c"],
-        updated_2026_status="Superseded or replaced",
+        updated_2026_status="Unable to verify",
         source_key="M25_21",
-        verification_confidence="Medium",
+        verification_confidence="Low",
         update_notes=(
-            "The original M-21-06-specific agency planning obligation is no longer the operative public "
-            "framework. M-25-21 now requires agencies to submit and publicly post updated compliance plans."
+            "Current public AI governance memoranda do not directly verify that agencies with regulatory "
+            "authorities completed the original M-21-06-specific review-and-plan submission obligation, "
+            "and the available evidence does not clearly show that the row was formally replaced."
         ),
-        superseded_or_replaced="Yes",
-        replacement_policy_source="OMB Memorandum M-25-21",
     )
     add(
         ["EO13859_8a_b", "EO13859_8c"],
-        updated_2026_status="Superseded or replaced",
+        updated_2026_status="Unable to verify",
         source_key="NSPM_AI_NSE",
-        verification_confidence="Medium",
+        verification_confidence="Low",
         update_notes=(
-            "The original national-security planning framework referenced by EO 13859 has been overtaken "
-            "by the June 5, 2026 National Security Presidential Memorandum on AI in the National Security Enterprise."
+            "The June 5, 2026 White House fact sheet shows a newer national-security AI directive exists, "
+            "but the public evidence reviewed here does not directly establish whether the original action "
+            "plan requirement and its implementation obligation were formally completed, replaced, or absorbed."
         ),
-        superseded_or_replaced="Yes",
-        replacement_policy_source="National Security Presidential Memorandum on AI in the National Security Enterprise (2026-06-05)",
     )
     add(
         ["EO13960_4b"],
-        updated_2026_status="Superseded or replaced",
+        updated_2026_status="Unable to verify",
         source_key="M25_21",
-        verification_confidence="Medium",
+        verification_confidence="Low",
         update_notes=(
-            "OMB moved beyond the earlier unfulfilled roadmap requirement and issued current AI use "
-            "and acquisition directives with public implementation tables."
+            "OMB later issued substantive AI use and acquisition memoranda, but this pass did not locate "
+            "direct public evidence that the specific roadmap requirement was completed or formally replaced."
         ),
-        superseded_or_replaced="Yes",
-        replacement_policy_source="OMB Memoranda M-25-21 and M-25-22",
     )
     add(
-        ["EO13960_6_cio_list", "EO13960_8c"],
+        ["EO13960_6_cio_list"],
+        updated_2026_status="Unable to verify",
+        source_key="M25_21",
+        verification_confidence="Low",
+        update_notes=(
+            "The current governance structure differs from the earlier CIO Council model, but this pass "
+            "did not locate direct public evidence of the required published list of recommended "
+            "interagency bodies or a clear formal replacement for that specific deliverable."
+        ),
+    )
+    add(
+        ["EO13960_8c"],
         updated_2026_status="Superseded or replaced",
         source_key="M25_21",
         verification_confidence="Medium",
         update_notes=(
-            "The current governance structure centers on designated Chief AI Officers, agency governance "
-            "boards, and the OMB-led Chief AI Officer Council rather than the earlier CIO Council structure."
+            "M-25-21 requires agencies to designate Chief AI Officers and establish governance structures, "
+            "which clearly absorb the earlier requirement to specify responsible officials for coordinating "
+            "implementation of the order's principles."
         ),
         superseded_or_replaced="Yes",
         replacement_policy_source="OMB Memorandum M-25-21",

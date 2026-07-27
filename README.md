@@ -43,6 +43,7 @@ The repository currently includes:
 - `data/processed/implementation_status_summary.csv` generated from the original counted baseline
 - `data/processed/requirements_coded_2026.csv` with preserved baseline fields plus the July 24, 2026 coding layer
 - `data/processed/implementation_status_summary_2026.csv` with both the comparable 45-row summary and the full 46-row tracker summary
+- `data/processed/row_audit_2026.csv` with the Monday, July 27, 2026 review of the highest-risk row-level decisions from the July 24 pass
 - `outputs/tables/requirement_status_table_2026.csv` and `outputs/tables/summary_table_2026.csv` for export-ready tables
 
 ## Methodology
@@ -97,17 +98,26 @@ Current progress:
 Using the same 45 counted baseline requirements as the original paper, the update finds:
 
 - `12` implemented (`26.7%`)
-- `12` partially implemented (`26.7%`)
-- `15` unable to verify (`33.3%`)
-- `6` superseded or replaced (`13.3%`)
+- `8` partially implemented (`17.8%`)
+- `24` unable to verify (`53.3%`)
+- `1` superseded or replaced (`2.2%`)
 - `0` not implemented
 
 Interpretation:
 
-- The public record is stronger in 2026 than it was in the original November 2022 baseline, especially for several guidance and workforce requirements.
-- A large share of the tracker still cannot be verified conservatively from public evidence alone.
-- Several obligations are now better coded as superseded by later policy instruments such as `M-25-21`, `M-25-22`, and the June 5, 2026 national-security directive rather than being forced into the original implementation categories.
-- The confidence mix is intentionally cautious across the 45 counted requirements: `7` high-confidence rows, `21` medium-confidence rows, and `17` low-confidence rows.
+- The public record is stronger in 2026 than it was in the original November 2022 baseline for some guidance, inventory, and workforce requirements.
+- After the row audit, more of the tracker is intentionally held at `Unable to verify` because the public evidence is broad, indirect, or not requirement-specific enough to support stronger coding.
+- Only one counted baseline row remains in `Superseded or replaced` after the audit applied a stricter standard for formal replacement or absorption.
+- The confidence mix remains intentionally cautious across the 45 counted requirements: `7` high-confidence rows, `14` medium-confidence rows, and `24` low-confidence rows.
+
+## Audit Note
+
+On Monday, July 27, 2026, the project ran a focused audit of `36` high-risk rows from the committed July 24 coding pass.
+
+- The audit reviewed all low-confidence rows, all `Partially implemented` rows, all `Superseded or replaced` rows, and all rows whose `status_change` was not the project's baseline-equivalent label `No material change`.
+- The audit output is saved in `data/processed/row_audit_2026.csv`.
+- The audit downgraded `9` rows to `Unable to verify`.
+- The largest changes affected broad strategic rows, named-agency high-performance-computing allocation claims, the CIO Council inventory-guidance row, and several earlier supersession judgments that were not directly supported by public replacement evidence.
 
 ## Validation Note
 
@@ -130,7 +140,7 @@ This project shares a core limitation with the original paper: it relies heavily
 
 That makes the project strong for measuring transparency and visible implementation, but it may undercount actions that occurred internally and were not clearly disclosed.
 
-The July 24, 2026 update is especially conservative. In several rows, later federal AI policy clearly exists, but the public record does not cleanly prove full completion of the original underlying requirement. Those rows are therefore left at `Partially implemented` or `Unable to verify`.
+The July 24, 2026 update, as tightened by the July 27 audit, is especially conservative. In several rows, later federal AI policy clearly exists, but the public record does not cleanly prove full completion, formal replacement, or direct fulfillment of the original underlying requirement. Those rows are therefore left at `Unable to verify` unless the evidence supports a narrower partial-implementation judgment.
 
 ## How to Reproduce
 
