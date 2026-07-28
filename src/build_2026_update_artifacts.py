@@ -23,7 +23,7 @@ CONFIDENCE_ORDER = ["High", "Medium", "Low"]
 
 STATUS_COLORS = {
     "Implemented": "#1b9e77",
-    "Partially implemented": "#66a61e",
+    "Partially implemented": "#1f78b4",
     "Unable to verify": "#7570b3",
     "Not implemented": "#d95f02",
     "Superseded or replaced": "#e6ab02",
@@ -717,12 +717,16 @@ def save_figure(output_path: Path, figure: plt.Figure) -> None:
 def plot_2026_status_summary(summary: pd.DataFrame) -> plt.Figure:
     """Plot the 2026 status summary by instrument."""
     set_plot_style()
-    figure, axis = plt.subplots()
+    figure, axis = plt.subplots(figsize=(12, 6.5))
     plot_frame = summary.loc[
         (summary["summary_basis"] == "comparable_baseline_45")
         & (summary["instrument"] != "Total")
     ].copy()
-    instruments = plot_frame["instrument"]
+    plot_frame["instrument_label"] = plot_frame.apply(
+        lambda row: f"{row['instrument']} (n={int(row['total_requirements'])})",
+        axis=1,
+    )
+    instruments = plot_frame["instrument_label"]
     cumulative = pd.Series(0, index=plot_frame.index, dtype=float)
 
     for status in UPDATE_STATUS_ORDER:
@@ -738,10 +742,15 @@ def plot_2026_status_summary(summary: pd.DataFrame) -> plt.Figure:
         cumulative += values
 
     axis.set_title(f"What public records showed on {ACCESS_DATE_LABEL}")
-    axis.set_xlabel("Percent of the 45-row checklist")
+    axis.set_xlabel("Percent within each policy source")
     axis.set_xlim(0, 100)
-    axis.legend(frameon=False, ncol=3, bbox_to_anchor=(0.5, 1.02), loc="lower center")
-    figure.tight_layout()
+    axis.legend(
+        frameon=False,
+        ncol=3,
+        bbox_to_anchor=(0.5, 1.04),
+        loc="lower center",
+    )
+    figure.tight_layout(rect=(0, 0, 1, 0.92))
     return figure
 
 

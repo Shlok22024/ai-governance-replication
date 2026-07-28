@@ -24,6 +24,13 @@ SECOND_PASS_STATUS_ORDER = [
     "Excluded because deadline had not passed",
 ]
 
+SECOND_PASS_DISPLAY_LABELS = {
+    "Implemented": "Implemented",
+    "Not implemented": "Not implemented",
+    "Unknown / Unable to verify": "Unclear / unable to verify",
+    "Excluded because deadline had not passed": "Excluded (deadline not passed)",
+}
+
 PAPER_TO_SECOND_PASS_STATUS = {
     "Implemented": "Implemented",
     "Not implemented": "Not implemented",
@@ -491,7 +498,7 @@ def build_agreement_note(dataframe: pd.DataFrame) -> str:
 def plot_comparison_heatmap(crosstab: pd.DataFrame, output_path: Path) -> None:
     """Render a heatmap comparing second-pass recoding to paper appendix statuses."""
     plt.style.use("seaborn-v0_8-whitegrid")
-    figure, axis = plt.subplots(figsize=(10, 6))
+    figure, axis = plt.subplots(figsize=(11.5, 5.3))
     sns.heatmap(
         crosstab,
         annot=True,
@@ -504,6 +511,17 @@ def plot_comparison_heatmap(crosstab: pd.DataFrame, output_path: Path) -> None:
     axis.set_title("My Second Check vs the Paper\n45 Requirements")
     axis.set_xlabel("Paper's answer")
     axis.set_ylabel("My answer")
+    axis.set_xticklabels(
+        [SECOND_PASS_DISPLAY_LABELS.get(label, label) for label in crosstab.columns],
+        rotation=0,
+        ha="center",
+    )
+    axis.set_yticklabels(
+        [SECOND_PASS_DISPLAY_LABELS.get(label, label) for label in crosstab.index],
+        rotation=0,
+        va="center",
+    )
+    axis.tick_params(axis="x", pad=6)
     figure.tight_layout()
     output_path.parent.mkdir(parents=True, exist_ok=True)
     figure.savefig(output_path, dpi=200, bbox_inches="tight")
