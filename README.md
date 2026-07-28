@@ -45,7 +45,7 @@ This repository is structured in three layers:
 The repository currently includes:
 
 - `data/raw/source_documents_log.csv` for the paper, original policy texts, blind-recoding evidence sources, and official update-period sources
-- `data/raw/search_log.csv` for requirement-level URLs reviewed during the 2026 evidence-quality confidence redesign
+- `data/raw/search_log.csv` for requirement-level URLs reviewed and logged during the July 28, 2026 evidence-quality redesign pass
 - `data/raw/original_requirements.csv` with the full appendix tracker plus counted-baseline flags
 - `data/processed/original_blind_recoding.csv` with the independent Phase 1B blind-coding pass for the 45 counted rows
 - `data/processed/blind_recoding_status_summary.csv` with the blind-recoding count distribution
@@ -57,6 +57,8 @@ The repository currently includes:
 - `data/processed/confidence_collinearity_report.csv` with the status-versus-confidence diagnostic report
 - `data/processed/implementation_status_summary_2026.csv` with both the comparable 45-row summary and the full 46-row tracker summary
 - `data/processed/row_audit_2026.csv` with the Monday, July 27, 2026 review of the highest-risk row-level decisions from the July 24 pass
+- `data/processed/status_recode_audit_2026.csv` with any status changes caused by the July 28 search-log pass
+- `data/processed/summary_stats.md` with the current authoritative generated counts for the appendix baseline, blind recode, 2026 update, confidence distribution, and search coverage
 - `outputs/tables/requirement_status_table_2026.csv` and `outputs/tables/summary_table_2026.csv` for export-ready tables
 
 ## Methodology
@@ -72,7 +74,8 @@ The project follows the paper's basic logic:
 7. Log requirement-level search activity in `data/raw/search_log.csv` so search breadth is auditable.
 8. Derive `sources_checked` from distinct URLs in that log instead of hand-entering counts.
 9. Apply a separate evidence-quality framework that scores confidence in the coding decision, not confidence that implementation happened.
-10. Compare the baseline, blind recode, and 2026 update without overwriting the paper-era fields.
+10. Allow a 2026 status change only when newly logged requirement-specific public evidence directly supports the change.
+11. Compare the baseline, blind recode, and 2026 update without overwriting the paper-era fields.
 
 The 2026 pass uses six update categories:
 
@@ -93,6 +96,7 @@ The evidence-quality redesign adds one more important guardrail:
 - `confidence_index` is derived, not hand-entered. It is computed from `evidence_found`, `evidence_specificity`, `evidence_temporal_fit`, `search_scope`, and `sources_checked`.
 - `evidence_found` is a branch selector, not a penalty. When `evidence_found = No`, the model scores confidence in the claim that the public record appears silent after a documented search.
 - `High` on an `Unable to verify` row means the coding decision is strong because the search was broad and well logged. It does **not** mean the project is confident the requirement was not implemented.
+- The current counts shown in this README are mirrored from `data/processed/summary_stats.md`, which is the authoritative generated summary file for the repository.
 
 ## Policy Context for the 2026 Update
 
@@ -117,6 +121,7 @@ Current progress:
 - Independent blind recoding completed for all 45 counted requirements using a `2022-11-15` public-evidence cutoff
 - July 24, 2026 requirement-level coding completed in `data/processed/requirements_coded_2026.csv`
 - Evidence-quality confidence redesign completed for the 2026 update layer, with logged search activity and derived `confidence_index` values
+- July 28, 2026 search-log audit completed with a separate `status_recode_audit_2026.csv` trail for any status movement
 - 2026 summary, comparison, status-change, and confidence charts regenerated from the coded dataset
 
 ## Main Output Charts
@@ -150,6 +155,8 @@ Comparison with the appendix-derived paper baseline:
 - Agreement rate: `84.4%`
 - The largest disagreements came from the blind pass being more conservative about inferring public noncompliance from silence and more cautious about treating follow-on requirements as triggered when a prerequisite memo was missing
 
+The authoritative blind-recode counts live in `data/processed/summary_stats.md`.
+
 ## July 24, 2026 Findings
 
 Using the same 45 counted baseline requirements as the original paper, the audited update finds that the current public record supports:
@@ -166,6 +173,8 @@ Interpretation:
 - After the row audit, more of the tracker is intentionally held at `Unable to verify` because the public evidence is broad, indirect, or not requirement-specific enough to support stronger coding.
 - Only one counted baseline row remains in `Superseded or replaced` after the audit applied a stricter standard for formal replacement or absorption.
 
+The authoritative 2026 counts live in `data/processed/summary_stats.md`.
+
 ## Evidence-Quality Confidence Redesign
 
 The confidence redesign now applies to the **2026 update layer first**. It has **not yet been extended to the blind-recoding layer**.
@@ -173,6 +182,7 @@ The confidence redesign now applies to the **2026 update layer first**. It has *
 Key mechanics:
 
 - `search_log.csv` records the URLs reviewed for each requirement, along with the result of each check.
+- The log was created during the July 28, 2026 redesign pass. Search breadth was not backfilled from undocumented earlier browsing.
 - `sources_checked` is derived from the count of distinct URLs in `search_log.csv` for each requirement.
 - `search_scope` is then derived from that logged search breadth: `4+` distinct URLs maps to `Exhaustive`, `2-3` to `Targeted`, and `1` to `Cursory`.
 - `confidence_index` is derived from the uploaded `confidence_rules.py` framework and scores confidence in the coding decision itself.
@@ -188,6 +198,7 @@ Most importantly:
 
 - `12` of the `25` `Unable to verify` rows are now `High`
 - `13` of the `25` `Unable to verify` rows are now `Medium`
+- All `25` `Unable to verify` rows now have `Targeted` or `Exhaustive` logged search coverage
 
 That means the project is no longer treating `Unable to verify` as automatically weak. In this framework, `High + Unable to verify` means the public record appears silent **after a documented search**, not that implementation definitely failed.
 
@@ -208,6 +219,7 @@ On Monday, July 27, 2026, the project ran a focused audit of `36` high-risk rows
 - The audit output is saved in `data/processed/row_audit_2026.csv`.
 - The audit downgraded `9` rows to `Unable to verify`.
 - The largest changes affected broad strategic rows, named-agency high-performance-computing allocation claims, the CIO Council inventory-guidance row, and several earlier supersession judgments that were not directly supported by public replacement evidence.
+- The follow-on July 28 search-log pass created `data/processed/status_recode_audit_2026.csv`; it is currently empty because no additional status changes were justified by new requirement-specific evidence.
 
 ## Validation Note
 

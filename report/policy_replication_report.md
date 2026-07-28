@@ -50,10 +50,13 @@ Two coding rules matter most:
 The evidence-quality redesign adds a second layer on top of those status decisions.
 
 - `search_log.csv` records the URLs reviewed for each requirement during the confidence pass.
+- The search log was created during the July 28, 2026 redesign pass rather than backfilled from undocumented earlier browsing.
 - `sources_checked` is derived from distinct URLs in that log, rather than hand-entered.
 - `confidence_index` is then derived from `evidence_found`, `evidence_specificity`, `evidence_temporal_fit`, `search_scope`, and `sources_checked`.
 - `confidence_index` measures confidence in the coding decision itself. It does **not** measure confidence that implementation happened.
+- A 2026 status can change only when newly logged requirement-specific public evidence directly supports the change.
 - This framework currently applies to the **2026 update layer first**. The blind-recoding layer has not yet been recoded under the same framework.
+- The current project counts are generated in `data/processed/summary_stats.md`, which is the authoritative summary file for the repository.
 
 ## Findings
 
@@ -66,6 +69,8 @@ The repository now has three substantive findings layers: the appendix reconstru
 - After normalizing label names, the blind pass agreed with the paper appendix on `38` of `45` rows, for an `84.4%` agreement rate.
 - The main disagreements came from the blind pass being more conservative about inferring public noncompliance from silence and more cautious about deadline-trigger logic for follow-on requirements.
 
+Those counts are mirrored from `data/processed/summary_stats.md`.
+
 ### July 24, 2026 Update
 
 The July 24, 2026 coding pass is complete, and a focused row audit was applied on Monday, July 27, 2026.
@@ -75,6 +80,7 @@ The July 24, 2026 coding pass is complete, and a focused row audit was applied o
 - On that 45-row baseline, the post-audit coded update finds that public evidence supports `12` implemented requirements, `8` partially implemented requirements, `24` requirements that remain unable to verify, and `1` requirement that is clearly superseded or replaced.
 - No counted requirement is coded `Not implemented` in 2026. That does not mean every obligation is complete; it reflects the deliberate choice to avoid over-classifying weak public evidence.
 - The row audit reviewed `36` high-risk rows and downgraded `9` of them to `Unable to verify`.
+- The follow-on July 28 search-log pass did not justify any additional status changes, so `status_recode_audit_2026.csv` is currently empty.
 
 ### Evidence-Quality Confidence Redesign
 
@@ -84,6 +90,7 @@ The July 24, 2026 coding pass is complete, and a focused row audit was applied o
 - The old confidence distribution was `7` high, `14` medium, and `25` low.
 - The new `confidence_index` distribution is `22` high and `24` medium, with `0` low.
 - Among the `25` `Unable to verify` rows, `12` are now `High` and `13` are `Medium`.
+- All `25` `Unable to verify` rows now have `Targeted` or `Exhaustive` logged search coverage.
 
 That last point is important. In this framework, `High + Unable to verify` means the project has high confidence that the public record appears silent after a documented search. It does **not** mean the project is highly confident that the underlying government action did not occur.
 

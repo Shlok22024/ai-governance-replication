@@ -56,6 +56,7 @@ Fields:
 Notes:
 
 - `sources_checked` in `requirements_coded_2026.csv` is derived from the count of distinct `url` values per `requirement_id` in this file.
+- This file reflects the auditable July 28, 2026 redesign pass. Search coverage is not backfilled from undocumented earlier browsing.
 - The confidence redesign currently applies to the 2026 update layer first and has not yet been extended to `original_blind_recoding.csv`.
 
 ### `raw/agency_ai_inventory_links.csv`
@@ -79,10 +80,14 @@ Fields:
 - `replication_evidence_url`: Public source URL used in the blind pass.
 - `replication_evidence_date`: Publication or timing label for the cited blind-recoding source.
 - `replication_notes`: Short justification for the blind-coding decision.
-- `replication_confidence`: Confidence rating for the blind-coding decision.
 - `paper_appendix_status`: Appendix-era status joined back only after blind coding was complete.
 - `agreement_with_paper`: `Agree` or `Disagree` after normalizing label names across the blind and appendix status schemes.
 - `discrepancy_reason`: Short explanation for disagreements between the blind pass and the paper appendix status.
+
+Notes:
+
+- The old-style `replication_confidence` field has been removed from this file because its semantics were incompatible with the newer `confidence_index` framework.
+- The evidence-quality confidence framework currently applies to the 2026 update layer first and is not yet used in the Phase 1B agreement calculations.
 
 ### `processed/blind_recoding_status_summary.csv`
 
@@ -197,6 +202,27 @@ Fields:
 - `no_longer_applicable_count`: Count of rows coded `No longer applicable`.
 - `no_longer_applicable_pct`: Percentage of rows coded `No longer applicable`.
 
+### `processed/status_recode_audit_2026.csv`
+
+Audit table for any 2026 status changes caused by the July 28 search-log pass.
+
+Fields:
+
+- `requirement_id`: Stable requirement identifier.
+- `previous_updated_2026_status`: Status before the July 28 search-log pass.
+- `new_updated_2026_status`: Status after the July 28 search-log pass.
+- `evidence_url`: Public evidence URL supporting the change.
+- `evidence_title`: Public title of the supporting evidence source.
+- `evidence_specificity`: Evidence-specificity classification used by the confidence framework.
+- `change_reason`: Short explanation for why the status changed.
+- `changed_by_search_pass`: `Yes` when the change came from the logged search pass.
+- `requires_manual_review`: Whether the change still needs manual follow-up.
+
+Notes:
+
+- This file can be empty except for headers when the search-log pass does not justify any additional status movement.
+- A status change is allowed only when newly logged requirement-specific public evidence directly supports it.
+
 ### `processed/row_audit_2026.csv`
 
 Focused audit table for the highest-risk July 24, 2026 row-level decisions reviewed on Monday, July 27, 2026.
@@ -219,6 +245,25 @@ Fields:
 ### `processed/implementation_status_summary.csv`
 
 Original-baseline replication summary generated from `raw/original_requirements.csv`.
+
+### `processed/summary_stats.md`
+
+Generated Markdown summary of the current authoritative project counts.
+
+Contents:
+
+- Original appendix-baseline counts
+- Blind-recode counts
+- Blind agreement-rate counts
+- 2026 audited status counts
+- July 28 status-recode change counts
+- Confidence-index distribution
+- Search-scope distribution
+- Search-log row and distinct-URL coverage counts
+
+Notes:
+
+- This file is the current source of truth for the public-facing counts referenced in `README.md` and `report/policy_replication_report.md`.
 
 ### `processed/agency_inventory_status.csv`
 

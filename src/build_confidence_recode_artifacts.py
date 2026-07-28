@@ -8,6 +8,13 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
+from build_2026_update_artifacts import (
+    build_2026_summary,
+    plot_2026_status_summary,
+    plot_original_vs_2026_comparison,
+    plot_status_change_matrix,
+    save_figure as save_update_figure,
+)
 from confidence_rules import (
     apply_confidence_index,
     check_collinearity,
@@ -48,6 +55,17 @@ CONFIDENCE_COLORS = {
     "Medium": "#7570b3",
     "Low": "#d95f02",
 }
+STATUS_RECODE_AUDIT_COLUMNS = [
+    "requirement_id",
+    "previous_updated_2026_status",
+    "new_updated_2026_status",
+    "evidence_url",
+    "evidence_title",
+    "evidence_specificity",
+    "change_reason",
+    "changed_by_search_pass",
+    "requires_manual_review",
+]
 
 
 def build_search_source_registry() -> dict[str, dict[str, str]]:
@@ -757,15 +775,215 @@ def build_quality_fields() -> dict[str, dict[str, str | None]]:
     return values
 
 
+def build_status_recode_audit(
+    coded_before_search: pd.DataFrame,
+    coded_after_search: pd.DataFrame,
+) -> pd.DataFrame:
+    """Record status changes caused by the documented search pass.
+
+    Rule enforced here: a 2026 status may change only when the new search pass
+    yields requirement-specific evidence that directly supports the change.
+    General landing pages, broad AI pages, and context-only sources cannot
+    upgrade a row. Program-level evidence may support `Partially implemented`
+    but not `Implemented` unless it directly satisfies the original requirement.
+    """
+    comparison = coded_after_search[
+        [
+            "requirement_id",
+            "updated_2026_status",
+            "evidence_url",
+            "evidence_title",
+            "evidence_specificity",
+        ]
+    ].merge(
+        coded_before_search[["requirement_id", "updated_2026_status"]].rename(
+            columns={"updated_2026_status": "previous_updated_2026_status"}
+        ),
+        on="requirement_id",
+        how="left",
+    )
+    changed = comparison.loc[
+        comparison["updated_2026_status"]
+        != comparison["previous_updated_2026_status"]
+    ].copy()
+
+    if changed.empty:
+        return pd.DataFrame(columns=STATUS_RECODE_AUDIT_COLUMNS)
+
+    invalid = changed.loc[
+        changed["evidence_specificity"] != "Requirement-specific",
+        "requirement_id",
+    ].tolist()
+    if invalid:
+        raise ValueError(
+            "2026 status changes must be backed by new requirement-specific evidence. "
+            f"Found noncompliant status changes for: {invalid}"
+        )
+
+    audit = changed.rename(
+        columns={
+            "updated_2026_status": "new_updated_2026_status",
+        }
+    ).copy()
+    audit["change_reason"] = (
+        "Status changed after the July 28, 2026 search pass because new "
+        "requirement-specific public evidence directly supported the revised coding decision."
+    )
+    audit["changed_by_search_pass"] = "Yes"
+    audit["requires_manual_review"] = "No"
+    return audit[STATUS_RECODE_AUDIT_COLUMNS].copy()
+
+
+def format_count_pct(count: int, total: int) -> str:
+    """Format a count with its share of the relevant total."""
+    pct = 0.0 if total == 0 else round(count / total * 100, 1)
+    return f"{count} ({pct}%)"
+
+
+def build_summary_stats_markdown(
+    *,
+    original_summary: pd.DataFrame,
+    blind_recoding: pd.DataFrame,
+    summary_2026: pd.DataFrame,
+    updated: pd.DataFrame,
+    search_log: pd.DataFrame,
+    row_audit: pd.DataFrame,
+    status_recode_audit: pd.DataFrame,
+) -> str:
+    """Build an authoritative Markdown snapshot of the current project counts."""
+    original_total = original_summary.loc[
+        (original_summary["summary_basis"] == "aggregate_included_rows")
+        & (original_summary["instrument"] == "Total")
+    ].iloc[0]
+    narrative_total = original_summary.loc[
+        (original_summary["summary_basis"] == "paper_published_narrative")
+        & (original_summary["instrument"] == "Total")
+    ].iloc[0]
+    comparable_2026 = summary_2026.loc[
+        (summary_2026["summary_basis"] == "comparable_baseline_45")
+        & (summary_2026["instrument"] == "Total")
+    ].iloc[0]
+    full_tracker_2026 = summary_2026.loc[
+        (summary_2026["summary_basis"] == "full_tracker_46")
+        & (summary_2026["instrument"] == "Total")
+    ].iloc[0]
+
+    blind_total = len(blind_recoding)
+    blind_counts = blind_recoding["replication_status"].value_counts().to_dict()
+    blind_agree = int((blind_recoding["agreement_with_paper"] == "Agree").sum())
+    blind_disagree = blind_total - blind_agree
+    blind_agreement_pct = 0.0 if blind_total == 0 else round(blind_agree / blind_total * 100, 1)
+
+    updated_total = len(updated)
+    confidence_counts = updated["confidence_index"].value_counts().to_dict()
+    previous_confidence_counts = (
+        updated["previous_verification_confidence"].value_counts().to_dict()
+    )
+    search_scope_counts = updated["search_scope"].value_counts().to_dict()
+    confidence_changed = int((updated["confidence_changed"] == "Yes").sum())
+    unable_to_verify = updated.loc[updated["updated_2026_status"] == "Unable to verify"].copy()
+    unable_strong_search = int(
+        unable_to_verify["search_scope"].isin(["Targeted", "Exhaustive"]).sum()
+    )
+
+    status_recode_changes = len(status_recode_audit)
+    row_audit_total = len(row_audit)
+    row_audit_downgrades = int(
+        (row_audit["audit_decision"] == "Downgrade to Unable to verify").sum()
+    )
+
+    search_log_rows = len(search_log)
+    distinct_urls = int(search_log["url"].nunique())
+
+    lines = [
+        "# Summary Stats",
+        "",
+        f"Generated on `{CHECK_DATE}` from the current project data files. These are the authoritative counts for Phase 1 and Phase 1B.",
+        "",
+        "## Original Appendix Baseline",
+        f"- Counted baseline rows: `{int(original_total['total_requirements'])}`",
+        f"- Generated counted baseline summary: `Implemented {int(original_total['implemented_count'])}`, `Unknown {int(original_total['unknown_count'])}`, `Not implemented {int(original_total['not_implemented_count'])}`",
+        f"- Paper published narrative summary: `Implemented {int(narrative_total['implemented_count'])}`, `Unknown {int(narrative_total['unknown_count'])}`, `Not implemented {int(narrative_total['not_implemented_count'])}`",
+        f"- Appendix-tracker rows preserved in the repo: `{int(full_tracker_2026['tracker_rows'])}`",
+        f"- Excluded baseline rows: `{int(full_tracker_2026['excluded_count'])}`",
+        "",
+        "## Blind Recode",
+        f"- `Implemented`: {format_count_pct(int(blind_counts.get('Implemented', 0)), blind_total)}",
+        f"- `Not implemented`: {format_count_pct(int(blind_counts.get('Not implemented', 0)), blind_total)}",
+        f"- `Unknown / Unable to verify`: {format_count_pct(int(blind_counts.get('Unknown / Unable to verify', 0)), blind_total)}",
+        f"- `Excluded because deadline had not passed`: {format_count_pct(int(blind_counts.get('Excluded because deadline had not passed', 0)), blind_total)}",
+        f"- Agreement with paper appendix: `{blind_agree} of {blind_total}` (`{blind_agreement_pct}%`)",
+        f"- Disagreements with paper appendix: `{blind_disagree}`",
+        "",
+        "## 2026 Audited Update",
+        (
+            "- Comparable 45-row baseline: "
+            f"`Implemented {int(comparable_2026['implemented_count'])}`, "
+            f"`Partially implemented {int(comparable_2026['partially_implemented_count'])}`, "
+            f"`Unable to verify {int(comparable_2026['unable_to_verify_count'])}`, "
+            f"`Not implemented {int(comparable_2026['not_implemented_count'])}`, "
+            f"`Superseded or replaced {int(comparable_2026['superseded_or_replaced_count'])}`, "
+            f"`No longer applicable {int(comparable_2026['no_longer_applicable_count'])}`"
+        ),
+        (
+            "- Full 46-row tracker: "
+            f"`Implemented {int(full_tracker_2026['implemented_count'])}`, "
+            f"`Partially implemented {int(full_tracker_2026['partially_implemented_count'])}`, "
+            f"`Unable to verify {int(full_tracker_2026['unable_to_verify_count'])}`, "
+            f"`Not implemented {int(full_tracker_2026['not_implemented_count'])}`, "
+            f"`Superseded or replaced {int(full_tracker_2026['superseded_or_replaced_count'])}`, "
+            f"`No longer applicable {int(full_tracker_2026['no_longer_applicable_count'])}`"
+        ),
+        f"- July 27 row audit rows reviewed: `{row_audit_total}`",
+        f"- July 27 downgrades to `Unable to verify`: `{row_audit_downgrades}`",
+        f"- July 28 search-pass status recode changes: `{status_recode_changes}`",
+        "",
+        "## Confidence Index Distribution",
+        f"- Previous confidence labels: `High {int(previous_confidence_counts.get('High', 0))}`, `Medium {int(previous_confidence_counts.get('Medium', 0))}`, `Low {int(previous_confidence_counts.get('Low', 0))}`",
+        f"- Current `confidence_index`: `High {int(confidence_counts.get('High', 0))}`, `Medium {int(confidence_counts.get('Medium', 0))}`, `Low {int(confidence_counts.get('Low', 0))}`",
+        f"- Rows whose confidence label changed: `{confidence_changed} of {updated_total}`",
+        "",
+        "## Search Scope Distribution",
+        f"- `Exhaustive`: `{int(search_scope_counts.get('Exhaustive', 0))}`",
+        f"- `Targeted`: `{int(search_scope_counts.get('Targeted', 0))}`",
+        f"- `Cursory`: `{int(search_scope_counts.get('Cursory', 0))}`",
+        f"- `Not searched`: `{int(search_scope_counts.get('Not searched', 0))}`",
+        f"- `Not recorded`: `{int(search_scope_counts.get('Not recorded', 0))}`",
+        "",
+        "## Search Log Coverage",
+        f"- Search-log rows: `{search_log_rows}`",
+        f"- Distinct URLs checked: `{distinct_urls}`",
+        (
+            "- `Unable to verify` rows with `Targeted` or `Exhaustive` search: "
+            f"`{unable_strong_search} of {len(unable_to_verify)}`"
+        ),
+    ]
+    return "\n".join(lines) + "\n"
+
+
 def apply_quality_framework(
     coded: pd.DataFrame,
     search_log: pd.DataFrame,
 ) -> pd.DataFrame:
     """Attach search-derived counts and evidence-quality metadata to the 2026 dataset."""
-    output = coded.copy()
+    derived_columns = [
+        "previous_verification_confidence",
+        "evidence_found",
+        "evidence_specificity",
+        "evidence_temporal_fit",
+        "search_scope",
+        "sources_checked",
+        "confidence_index",
+        "confidence_changed",
+    ]
+    output = coded.drop(columns=derived_columns, errors="ignore").copy()
     output["previous_verification_confidence"] = output["verification_confidence"]
 
-    source_counts = sources_checked_from_log(search_log).rename("sources_checked")
+    source_counts = (
+        sources_checked_from_log(search_log)
+        .rename("sources_checked")
+        .reset_index()
+    )
     output = output.merge(source_counts, on="requirement_id", how="left")
     output["sources_checked"] = output["sources_checked"].fillna(0).astype(int)
     output["search_scope"] = output["sources_checked"].map(derive_search_scope)
@@ -964,8 +1182,8 @@ def plot_shift_heatmap(
 
 def main() -> None:
     """Generate search-log and confidence-redesign artifacts."""
-    coded = load_current_coded()
-    search_log = build_search_log(coded)
+    coded_before_search = load_current_coded()
+    search_log = build_search_log(coded_before_search)
 
     raw_dir = project_path("data", "raw")
     processed_dir = project_path("data", "processed")
@@ -973,8 +1191,14 @@ def main() -> None:
 
     save_csv(search_log, raw_dir / "search_log.csv")
 
-    updated = apply_quality_framework(coded, search_log)
+    updated = apply_quality_framework(coded_before_search, search_log)
     save_csv(updated, processed_dir / "requirements_coded_2026.csv")
+
+    status_recode_audit = build_status_recode_audit(coded_before_search, updated)
+    save_csv(status_recode_audit, processed_dir / "status_recode_audit_2026.csv")
+
+    summary_2026 = build_2026_summary(updated)
+    save_csv(summary_2026, processed_dir / "implementation_status_summary_2026.csv")
 
     collinearity = check_collinearity(
         updated,
@@ -986,6 +1210,20 @@ def main() -> None:
 
     confidence_summary = build_confidence_summary(updated)
     save_csv(confidence_summary, processed_dir / "confidence_recode_summary.csv")
+
+    original_summary = pd.read_csv(processed_dir / "implementation_status_summary.csv")
+    row_audit = pd.read_csv(processed_dir / "row_audit_2026.csv")
+    blind_recoding = pd.read_csv(processed_dir / "original_blind_recoding.csv")
+    summary_stats = build_summary_stats_markdown(
+        original_summary=original_summary,
+        blind_recoding=blind_recoding,
+        summary_2026=summary_2026,
+        updated=updated,
+        search_log=search_log,
+        row_audit=row_audit,
+        status_recode_audit=status_recode_audit,
+    )
+    (processed_dir / "summary_stats.md").write_text(summary_stats, encoding="utf-8")
 
     scope_crosstab = pd.crosstab(
         updated["updated_2026_status"],
@@ -1013,6 +1251,18 @@ def main() -> None:
     plot_shift_heatmap(
         updated,
         figures_dir / "confidence_index_shift.png",
+    )
+    save_update_figure(
+        figures_dir / "implementation_status_2026.png",
+        plot_2026_status_summary(summary_2026),
+    )
+    save_update_figure(
+        figures_dir / "original_vs_2026_comparison.png",
+        plot_original_vs_2026_comparison(original_summary, summary_2026),
+    )
+    save_update_figure(
+        figures_dir / "status_change_matrix.png",
+        plot_status_change_matrix(updated),
     )
 
 

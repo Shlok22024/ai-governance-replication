@@ -131,7 +131,6 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
         *,
         status: str,
         source_key: str,
-        confidence: str,
         notes: str,
     ) -> None:
         source = sources[source_key]
@@ -141,7 +140,6 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
                 "replication_evidence_url": source["url"],
                 "replication_evidence_date": source["date"],
                 "replication_notes": notes,
-                "replication_confidence": confidence,
             }
 
     add(
@@ -152,7 +150,6 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
         ],
         status="Implemented",
         source_key="NAI_RD_2019_PLAN",
-        confidence="High",
         notes=(
             "Public planning and investment documents available before the study cutoff show "
             "that AI R&D had been elevated as a budget and planning priority and was being "
@@ -163,7 +160,6 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
         ["EO13859_5a_i_rfi"],
         status="Implemented",
         source_key="FR_DATA_RFI",
-        confidence="High",
         notes=(
             "The required Federal Register request for information was publicly issued within "
             "the required time window."
@@ -173,7 +169,6 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
         ["EO13859_5a_i_barriers"],
         status="Implemented",
         source_key="FED_DATA_2020_ACTION_PLAN",
-        confidence="Medium",
         notes=(
             "The Federal Data Strategy action-plan materials publicly tracked the AI data "
             "and model access workstream, which supports a conservative implementation call "
@@ -184,7 +179,6 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
         ["EO13859_5c"],
         status="Implemented",
         source_key="CLOUD_REPORT",
-        confidence="High",
         notes=(
             "The required NSTC report on enabling cloud resources for federally funded AI "
             "R&D was publicly issued in November 2020."
@@ -194,7 +188,6 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
         ["EO13859_6a_b"],
         status="Implemented",
         source_key="M21_06",
-        confidence="High",
         notes=(
             "The original study window included both the public-comment step and the final "
             "OMB memorandum on AI regulatory approaches."
@@ -204,7 +197,6 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
         ["EO13859_6d"],
         status="Implemented",
         source_key="NIST_STANDARDS_PLAN",
-        confidence="High",
         notes=(
             "NIST publicly released the required plan for federal engagement in AI technical "
             "standards and related tools before the original study cutoff."
@@ -214,7 +206,6 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
         ["EO13960_5a"],
         status="Implemented",
         source_key="HHS_AI_INVENTORY_FY22",
-        confidence="Medium",
         notes=(
             "A public FY2022 agency AI inventory was available during the study period, which "
             "supports the inference that the CIO Council had issued publicly usable inventory "
@@ -225,7 +216,6 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
         ["EO13960_7a"],
         status="Implemented",
         source_key="PIF_2021",
-        confidence="High",
         notes=(
             "GSA publicly described an AI-emphasis track within the Presidential Innovation "
             "Fellows program and identified AI-focused fellows and projects."
@@ -235,7 +225,6 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
         ["AIGA_103_create_coe"],
         status="Implemented",
         source_key="GSA_AI_COE",
-        confidence="High",
         notes=(
             "GSA publicly operated an Artificial Intelligence Center of Excellence during the "
             "study period, satisfying the center-creation requirement."
@@ -245,7 +234,6 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
         ["EO13960_4b", "EO13960_6_cio_list", "AIGA_104_abd"],
         status="Not implemented",
         source_key="EO13960",
-        confidence="Medium",
         notes=(
             "This row required a concrete public posting or guidance deliverable. The blind "
             "recode did not locate a matching public artifact by the study cutoff."
@@ -255,7 +243,6 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
         ["AIGA_104_abd"],
         status="Not implemented",
         source_key="AIGA",
-        confidence="High",
         notes=(
             "The AI in Government Act required draft and final OMB guidance on acquisition "
             "and use of AI, but no such public memo was located by the study cutoff."
@@ -265,7 +252,6 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
         ["AIGA_104c"],
         status="Excluded because deadline had not passed",
         source_key="AIGA",
-        confidence="High",
         notes=(
             "This follow-on agency posting requirement depended on issuance of the OMB memo "
             "required in section 104(a), and the blind recode did not treat that triggering "
@@ -291,7 +277,6 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
         ],
         status="Unknown / Unable to verify",
         source_key="EO13859",
-        confidence="Medium",
         notes=(
             "The blind recode treated this as an ongoing, internal, or multi-part obligation "
             "for which public evidence before the study cutoff was not specific enough to "
@@ -310,7 +295,6 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
         ],
         status="Unknown / Unable to verify",
         source_key="EO13960",
-        confidence="Medium",
         notes=(
             "The blind recode treated this as an ongoing, internal, or multi-part obligation "
             "for which public evidence before the study cutoff was not specific enough to "
@@ -325,7 +309,6 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
         ],
         status="Unknown / Unable to verify",
         source_key="HHS_AI_INVENTORY_FY22",
-        confidence="Medium",
         notes=(
             "A public FY2022 AI inventory showed that some agencies were publishing use-case "
             "materials, but the blind recode did not infer full completion of the related "
@@ -336,7 +319,6 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
         ["EO13859_5b"],
         status="Unknown / Unable to verify",
         source_key="LESSONS_LEARNED_HPC",
-        confidence="Medium",
         notes=(
             "Public materials showed progress on AI-related computing access, but the blind "
             "recode did not find requirement-specific public proof that each named agency had "
@@ -347,7 +329,6 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
         ["EO13960_5b", "EO13960_5e"],
         status="Unknown / Unable to verify",
         source_key="HHS_AI_INVENTORY_FY22",
-        confidence="Medium",
         notes=(
             "At least one public FY2022 AI inventory was available, but the blind recode did "
             "not infer whole-of-government completion for every responsible agency from a "
@@ -358,7 +339,6 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
         ["AIGA_103_duties", "AIGA_105a", "AIGA_105b"],
         status="Unknown / Unable to verify",
         source_key="AIGA",
-        confidence="Medium",
         notes=(
             "The statute describes concrete duties, but the blind recode did not locate enough "
             "requirement-specific public evidence by the study cutoff to verify the full bundle "
@@ -573,7 +553,6 @@ def main() -> None:
             "replication_evidence_url",
             "replication_evidence_date",
             "replication_notes",
-            "replication_confidence",
             "paper_appendix_status",
             "agreement_with_paper",
             "discrepancy_reason",
