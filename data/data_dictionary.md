@@ -4,7 +4,7 @@
 
 ### `raw/original_requirements.csv`
 
-Requirement-level extraction from the original paper and counted-baseline reconciliation.
+Requirement-level reconstruction of the paper's appendix tracker and counted-baseline logic.
 
 Fields:
 
@@ -17,17 +17,17 @@ Fields:
 - `aggregate_count_included`: `Yes` if the row belongs to the paper's 45-row counted baseline, `No` otherwise.
 - `original_evidence_notes`: Notes from the original extraction pass.
 - `appendix_status`: Status label reflected in the appendix-facing tracker logic.
-- `aggregate_status`: Counted-baseline status used for the replication summary.
+- `aggregate_status`: Counted-baseline status used for the baseline summary.
 - `validation_note`: Reconciliation note for appendix versus aggregate handling.
 
 Notes:
 
-- The appendix tracker contains 46 rows.
-- The counted baseline contains 45 included requirements because `EO13960 section 5(c)(ii)` is explicitly excluded by the paper's footnote 8.
+- The appendix tracker contains `46` rows.
+- The counted baseline contains `45` included requirements because `EO13960 section 5(c)(ii)` is explicitly excluded by the paper's footnote 8.
 
 ### `raw/source_documents_log.csv`
 
-Log of public legal, policy, and agency sources used in the appendix reconstruction, the blind recoding pass, and the 2026 update.
+Log of public legal, policy, and agency sources used in the appendix reconstruction, the independent second-pass recoding, and the 2026 update.
 
 Fields:
 
@@ -40,86 +40,66 @@ Fields:
 - `relevance_to_project`: How the source is used in the project.
 - `notes`: Additional source-handling notes.
 
-### `raw/search_log.csv`
-
-Requirement-level search log for the 2026 evidence-quality confidence redesign.
-
-Fields:
-
-- `requirement_id`: Stable requirement identifier linked to the 2026 update layer.
-- `url`: Distinct URL reviewed for that requirement during the redesign pass.
-- `source_title`: Public title or expected title of the reviewed page or artifact.
-- `date_checked`: Date the URL was reviewed in the redesign pass.
-- `result`: Search outcome label. Allowed values are `Supports`, `Partial support`, `Context only`, `No evidence`, `Dead link`, and `Not relevant`.
-- `notes`: Short explanation of how the URL was interpreted for that requirement.
-
-Notes:
-
-- `sources_checked` in `requirements_coded_2026.csv` is derived from the count of distinct `url` values per `requirement_id` in this file.
-- This file reflects the auditable July 28, 2026 redesign pass. Search coverage is not backfilled from undocumented earlier browsing.
-- The confidence redesign currently applies to the 2026 update layer first and has not yet been extended to `original_blind_recoding.csv`.
-
 ### `raw/agency_ai_inventory_links.csv`
 
 Reference list for agency AI inventory pages and related public sources.
 
 ## Processed Data
 
-### `processed/original_blind_recoding.csv`
+### `processed/original_second_pass_recoding.csv`
 
-Independent Phase 1B blind-recoding table for the 45 counted baseline requirements.
+Independent second-pass recoding table for the 45 counted baseline requirements.
 
 Fields:
 
 - `requirement_id`: Stable requirement identifier.
 - `source_policy`: Original source policy tracked by the paper.
-- `requirement_text`: Requirement text used during blind coding.
+- `requirement_text`: Requirement text used during second-pass coding.
 - `responsible_entity`: Agency, office, or actor responsible for the requirement.
 - `deadline`: Original requirement deadline or cadence.
-- `replication_status`: Independent blind-coding status using the November 15, 2022 public-evidence cutoff.
-- `replication_evidence_url`: Public source URL used in the blind pass.
-- `replication_evidence_date`: Publication or timing label for the cited blind-recoding source.
-- `replication_notes`: Short justification for the blind-coding decision.
-- `paper_appendix_status`: Appendix-era status joined back only after blind coding was complete.
-- `agreement_with_paper`: `Agree` or `Disagree` after normalizing label names across the blind and appendix status schemes.
-- `discrepancy_reason`: Short explanation for disagreements between the blind pass and the paper appendix status.
+- `replication_status`: Independent second-pass status using the November 15, 2022 public-evidence cutoff.
+- `replication_evidence_url`: Public source URL used in the second pass.
+- `replication_evidence_date`: Publication or timing label for the cited second-pass source.
+- `replication_notes`: Short justification for the second-pass coding decision.
+- `paper_appendix_status`: Appendix-era status joined back only after second-pass coding was complete.
+- `agreement_with_paper`: `Agree` or `Disagree` after normalizing label names across the second-pass and appendix status schemes.
+- `discrepancy_reason`: Short explanation for disagreements between the second pass and the paper appendix status.
 
-Notes:
+### `processed/second_pass_recoding_status_summary.csv`
 
-- The old-style `replication_confidence` field has been removed from this file because its semantics were incompatible with the newer `confidence_index` framework.
-- The evidence-quality confidence framework currently applies to the 2026 update layer first and is not yet used in the Phase 1B agreement calculations.
-
-### `processed/blind_recoding_status_summary.csv`
-
-Summary table for the independent blind-recoding pass.
+Summary table for the independent second-pass recoding.
 
 Fields:
 
-- `replication_status`: Blind-coding status category.
+- `replication_status`: Second-pass status category.
 - `count`: Number of rows in that category.
 - `percentage`: Percentage of the 45 counted rows in that category.
-- `cutoff_date`: Public-evidence cutoff date used for the blind recode.
-- `total_requirements`: Total number of counted baseline rows reviewed in the blind pass.
+- `cutoff_date`: Public-evidence cutoff date used for the second pass.
+- `total_requirements`: Total number of counted baseline rows reviewed in the second pass.
 
-### `processed/blind_recoding_vs_paper_comparison.csv`
+### `processed/second_pass_recoding_vs_paper_comparison.csv`
 
-Cross-tabulation comparing blind-recoding statuses against the paper appendix statuses after label normalization.
+Cross-tabulation comparing second-pass statuses against the paper appendix statuses after label normalization.
 
 Fields:
 
-- `blind_recoding_status`: Row-axis blind-recoding status.
+- `second_pass_recoding_status`: Row-axis second-pass status.
 - `Implemented`: Count of rows whose paper appendix status normalizes to `Implemented`.
 - `Not implemented`: Count of rows whose paper appendix status normalizes to `Not implemented`.
 - `Unknown / Unable to verify`: Count of rows whose paper appendix status normalizes to `Unknown / Unable to verify`.
 - `Excluded because deadline had not passed`: Count of rows whose paper appendix status normalizes to `Excluded because deadline had not passed`.
 
-### `processed/blind_recoding_agreement_rate.md`
+### `processed/second_pass_recoding_agreement_rate.md`
 
-Short Markdown summary of blind-recoding agreement with the paper appendix.
+Short Markdown summary of agreement between the independent second-pass recoding and the paper appendix.
+
+### `processed/implementation_status_summary.csv`
+
+Original-baseline summary generated from `raw/original_requirements.csv`.
 
 ### `processed/requirements_coded_2026.csv`
 
-Main audited July 24, 2026 update dataset, preserving the original baseline fields and adding the 2026 coding layer.
+Main July 24, 2026 update dataset, preserving the original baseline fields and adding the 2026 coding layer.
 
 Fields:
 
@@ -131,55 +111,20 @@ Fields:
 - `appendix_status`: Appendix-facing baseline status.
 - `aggregate_status`: Counted-baseline status used for comparison against the paper.
 - `aggregate_count_included`: Whether the row is included in the comparable 45-row baseline.
-- `updated_2026_status`: Audited 2026 status using public evidence.
+- `updated_2026_status`: July 24, 2026 status using public evidence.
 - `status_change`: Human-readable comparison label between the baseline and the 2026 status.
 - `evidence_url`: Public source URL used for the 2026 status.
 - `evidence_title`: Public title of the cited 2026 source.
 - `evidence_date`: Publication or access date for the cited source.
 - `evidence_source_type`: Short label describing the type of public evidence.
-- `verification_confidence`: Confidence rating for the 2026 coding decision.
-- `previous_verification_confidence`: Copy of the pre-redesign confidence label preserved for comparison.
-- `evidence_found`: Branch selector for the confidence framework. `Yes` means direct supporting evidence was located for the assigned status; `No` means the confidence score is based on the quality and breadth of a documented search.
-- `evidence_specificity`: How directly the located evidence maps to the requirement. Blank when `evidence_found = No`.
-- `evidence_temporal_fit`: Whether the evidence is current, historical-but-still-applicable, context-shifted, unclear, or not applicable.
-- `search_scope`: Search-breadth label derived from the logged URL count for that requirement.
-- `sources_checked`: Count of distinct URLs reviewed for that requirement, derived from `raw/search_log.csv`.
-- `confidence_index`: Derived evidence-quality confidence label (`High`, `Medium`, `Low`) computed from the fields above. It measures confidence in the coding decision, not confidence that implementation happened.
-- `confidence_changed`: `Yes` if `confidence_index` differs from `previous_verification_confidence`, otherwise `No`.
+- `verification_confidence`: Coding confidence from the July 24, 2026 update pass.
 - `update_notes`: Short justification for the 2026 coding decision.
 - `superseded_or_replaced`: `Yes` if the requirement is coded as clearly superseded or replaced, otherwise `No`.
 - `replacement_policy_source`: Later policy source that replaced or absorbed the original requirement, if applicable.
 
-Notes:
-
-- `High + Unable to verify` means the project has high confidence that the public record appears silent after a documented search. It does **not** mean the project is highly confident that implementation did not happen.
-
-### `processed/confidence_recode_summary.csv`
-
-Compact summary table for the 2026 evidence-quality confidence redesign.
-
-Fields:
-
-- `summary_type`: Summary slice label, such as `overview`, `previous_confidence`, `confidence_index`, `confidence_changed`, `search_scope_by_status`, or `confidence_index_by_status`.
-- `group`: Grouping label for the summary row, such as `all_rows` or a specific `updated_2026_status` value.
-- `label`: The category being counted within that summary slice.
-- `count`: Number of rows in that category.
-
-### `processed/confidence_collinearity_report.csv`
-
-Diagnostic report showing whether any 2026 status still maps too strongly to one confidence label after the redesign.
-
-Fields:
-
-- `status`: `updated_2026_status` value being evaluated.
-- `n`: Number of rows with that status.
-- `dominant_value`: Confidence label with the largest share within that status.
-- `dominant_share`: Share of rows in that status assigned to `dominant_value`.
-- `flagged`: Whether `dominant_share` exceeds the configured threshold of `0.70`.
-
 ### `processed/implementation_status_summary_2026.csv`
 
-Summary table for the audited 2026 update, including both the comparable counted baseline and the full 46-row tracker view.
+Summary table for the July 24, 2026 update, including both the comparable counted baseline and the full 46-row tracker view.
 
 Fields:
 
@@ -202,27 +147,6 @@ Fields:
 - `no_longer_applicable_count`: Count of rows coded `No longer applicable`.
 - `no_longer_applicable_pct`: Percentage of rows coded `No longer applicable`.
 
-### `processed/status_recode_audit_2026.csv`
-
-Audit table for any 2026 status changes caused by the July 28 search-log pass.
-
-Fields:
-
-- `requirement_id`: Stable requirement identifier.
-- `previous_updated_2026_status`: Status before the July 28 search-log pass.
-- `new_updated_2026_status`: Status after the July 28 search-log pass.
-- `evidence_url`: Public evidence URL supporting the change.
-- `evidence_title`: Public title of the supporting evidence source.
-- `evidence_specificity`: Evidence-specificity classification used by the confidence framework.
-- `change_reason`: Short explanation for why the status changed.
-- `changed_by_search_pass`: `Yes` when the change came from the logged search pass.
-- `requires_manual_review`: Whether the change still needs manual follow-up.
-
-Notes:
-
-- This file can be empty except for headers when the search-log pass does not justify any additional status movement.
-- A status change is allowed only when newly logged requirement-specific public evidence directly supports it.
-
 ### `processed/row_audit_2026.csv`
 
 Focused audit table for the highest-risk July 24, 2026 row-level decisions reviewed on Monday, July 27, 2026.
@@ -232,19 +156,15 @@ Fields:
 - `requirement_id`: Stable requirement identifier.
 - `source_policy`: Original source policy tracked by the paper.
 - `requirement_text`: Requirement text used during audit review.
-- `updated_2026_status`: Pre-audit status from the committed July 24, 2026 coded dataset.
+- `updated_2026_status`: Status from the July 24, 2026 coded dataset.
 - `evidence_url`: Public evidence URL reviewed during the audit.
 - `evidence_title`: Public title of the audited evidence source.
 - `evidence_date`: Publication or access date for the audited evidence source.
-- `verification_confidence`: Pre-audit confidence label.
+- `verification_confidence`: Confidence label carried from the July 24, 2026 coding pass.
 - `audit_decision`: Audit action taken or recommended.
 - `audit_reason`: Short explanation for the audit decision.
 - `recommended_status`: Final recommended status after audit review.
 - `requires_manual_review`: Whether the row still needs manual review.
-
-### `processed/implementation_status_summary.csv`
-
-Original-baseline replication summary generated from `raw/original_requirements.csv`.
 
 ### `processed/summary_stats.md`
 
@@ -252,19 +172,12 @@ Generated Markdown summary of the current authoritative project counts.
 
 Contents:
 
-- Original appendix-baseline counts
-- Blind-recode counts
-- Blind agreement-rate counts
-- 2026 audited status counts
-- July 28 status-recode change counts
-- Confidence-index distribution
-- Search-scope distribution
-- Search-log row and distinct-URL coverage counts
-
-Notes:
-
-- This file is the current source of truth for the public-facing counts referenced in `README.md` and `report/policy_replication_report.md`.
+- Appendix-derived baseline counts
+- Independent second-pass recoding counts
+- Agreement rate and Cohen's kappa
+- July 24, 2026 update counts
+- July 27, 2026 row-audit counts
 
 ### `processed/agency_inventory_status.csv`
 
-Optional extension dataset reserved for future agency-level inventory tracking.
+Reserved dataset from earlier exploration. It is not used in the core reproduction workflow described in the README.

@@ -1,146 +1,104 @@
 # Policy Replication Report
 
-## Introduction
+## Overview
 
-This project reconstructs, stress-tests, and extends the main findings of Lawrence, Cui, and Ho's 2023 paper on U.S. federal AI governance implementation.
+This project studies the requirement-level analysis behind Lawrence, Cui, and Ho's 2023 AIES paper on U.S. federal AI governance implementation. It does three things:
 
-This deliverable is a **Phase 1 MVP**, not a full replication of every component of the original paper.
+1. Reconstruct the appendix-derived counted baseline from the paper.
+2. Recode the same 45 counted requirements independently using public evidence that would reasonably have been available by November 15, 2022.
+3. Compare that baseline with a limited public-evidence update coded on July 24, 2026.
 
-## Original Paper Summary
+The goal is not to claim a full end-to-end replication of every part of the paper. The goal is to understand how the requirement-level coding works, where coding judgments matter, and what can still be said from public evidence in 2026.
 
-The original paper studied three major federal AI governance pillars and found that, based on public evidence available as of November 2022, only a minority of tracked legal requirements could be verified as implemented.
+## Paper Studied
 
-## Replication Approach
+Lawrence, Christie, Isaac Cui, and Daniel E. Ho. 2023. _The Bureaucratic Challenge to AI Governance: An Empirical Assessment of Implementation at U.S. Federal Agencies_. Proceedings of the AAAI/ACM Conference on AI, Ethics, and Society (AIES '23).
 
-The replication work in this repository proceeds in three stages:
+The paper tracks implementation across:
 
-1. Reconstruct the appendix tracker and the 45-row counted baseline.
-2. Run an independent blind recoding pass using only public evidence that would reasonably have been available by November 15, 2022.
-3. Build a requirement-level dataset that supports a conservative public-evidence update coded on Friday, July 24, 2026.
+- Executive Order 13859
+- Executive Order 13960
+- The AI in Government Act of 2020
 
-## Blind Recoding Methodology
+## Method
 
-The Phase 1B blind recode is meant to behave more like an actual replication exercise than a simple appendix transcription.
+### Appendix audit
 
-- The coding pass used `original_requirements.csv` only as a requirement list during assignment.
-- The blind pass did **not** use `appendix_status` or `aggregate_status` while assigning `replication_status`.
-- After all 45 counted rows were coded, the appendix-era status labels were joined back for agreement analysis.
+The first step reconstructs the paper's requirement tracker as a structured dataset. This produces a 46-row appendix tracker and a 45-row counted baseline after excluding `EO13960 section 5(c)(ii)`, consistent with the paper's own footnote.
 
-The blind pass used four categories:
+### Independent baseline recoding
 
-- `Implemented`
-- `Not implemented`
-- `Unknown / Unable to verify`
-- `Excluded because deadline had not passed`
+The second step recodes the 45 counted requirements using public evidence that would reasonably have been available by November 15, 2022.
 
-This step matters because it separates two questions that can otherwise get blurred together:
+This second-pass coding used `original_requirements.csv` as a requirement list during assignment and joined the appendix statuses back only after the row-level coding was complete. It was designed to reduce direct dependence on the appendix labels during assignment, but it was not a formal blinded study because the appendix reconstruction had already been completed earlier in the project.
 
-1. What status does the appendix appear to assign?
-2. What status would an independent coder assign from public evidence alone?
+### July 24, 2026 public-evidence update
 
-## 2026 Update Methodology
+The third step preserves the paper-era baseline and adds a separate 2026 coding layer. This update uses only public evidence and is intentionally conservative. If a requirement cannot be verified clearly from public documents, the row is held at `Unable to verify` rather than being pushed into a stronger claim.
 
-The update phase uses only publicly available evidence from official federal sources, including executive orders, OMB memoranda, agency guidance, and agency AI-related disclosures.
-
-Two coding rules matter most:
-
-- The original baseline fields remain untouched so the paper replication and the 2026 update can be compared side by side.
-- Weak or indirect public evidence is treated conservatively. When the public record does not clearly prove completion, the row is coded as `Unable to verify` or given lower confidence rather than upgraded aggressively.
-
-The evidence-quality redesign adds a second layer on top of those status decisions.
-
-- `search_log.csv` records the URLs reviewed for each requirement during the confidence pass.
-- The search log was created during the July 28, 2026 redesign pass rather than backfilled from undocumented earlier browsing.
-- `sources_checked` is derived from distinct URLs in that log, rather than hand-entered.
-- `confidence_index` is then derived from `evidence_found`, `evidence_specificity`, `evidence_temporal_fit`, `search_scope`, and `sources_checked`.
-- `confidence_index` measures confidence in the coding decision itself. It does **not** measure confidence that implementation happened.
-- A 2026 status can change only when newly logged requirement-specific public evidence directly supports the change.
-- This framework currently applies to the **2026 update layer first**. The blind-recoding layer has not yet been recoded under the same framework.
-- The current project counts are generated in `data/processed/summary_stats.md`, which is the authoritative summary file for the repository.
+The 2026 review should therefore be read as a limited public-evidence update, not as proof of agency noncompliance.
 
 ## Findings
 
-The repository now has three substantive findings layers: the appendix reconstruction, the blind recode, and the July 24, 2026 update.
+### 1. Appendix-derived baseline vs paper prose
 
-### Blind Recoding
+The reconstructed counted baseline supports:
 
-- The blind pass coded all `45` counted requirements using a November 15, 2022 public-evidence cutoff.
-- It found `11` implemented rows, `3` not implemented rows, `30` rows that remained unknown or unable to verify, and `1` row treated as excluded because its deadline had not yet been triggered.
-- After normalizing label names, the blind pass agreed with the paper appendix on `38` of `45` rows, for an `84.4%` agreement rate.
-- The main disagreements came from the blind pass being more conservative about inferring public noncompliance from silence and more cautious about deadline-trigger logic for follow-on requirements.
+- `12` implemented
+- `26` unknown
+- `7` not implemented
 
-Those counts are mirrored from `data/processed/summary_stats.md`.
+The paper's prose reports `11` implemented requirements. This repository treats that as a documented paper-level inconsistency between prose and appendix-derived counts, rather than silently forcing the row-level data to match the prose.
 
-### July 24, 2026 Update
+### 2. Independent second-pass recoding
 
-The July 24, 2026 coding pass is complete, and a focused row audit was applied on Monday, July 27, 2026.
+The independent second-pass recoding produced:
 
-- The full appendix tracker remains at 46 rows, including the excluded `EO13960 section 5(c)(ii)` row.
-- The comparable baseline remains 45 counted requirements after applying the paper's own exclusion logic.
-- On that 45-row baseline, the post-audit coded update finds that public evidence supports `12` implemented requirements, `8` partially implemented requirements, `24` requirements that remain unable to verify, and `1` requirement that is clearly superseded or replaced.
-- No counted requirement is coded `Not implemented` in 2026. That does not mean every obligation is complete; it reflects the deliberate choice to avoid over-classifying weak public evidence.
-- The row audit reviewed `36` high-risk rows and downgraded `9` of them to `Unable to verify`.
-- The follow-on July 28 search-log pass did not justify any additional status changes, so `status_recode_audit_2026.csv` is currently empty.
+- `11` implemented
+- `3` not implemented
+- `30` unknown or unable to verify
+- `1` excluded because the deadline had not passed
 
-### Evidence-Quality Confidence Redesign
+Agreement with the paper appendix was `38 of 45`, or `84.4%`, with `κ = 0.71`.
 
-- The redesign logged requirement-level search activity in `data/raw/search_log.csv`.
-- It derived `sources_checked` from distinct URLs per requirement and then recomputed confidence with the uploaded `confidence_rules.py` logic.
-- The redesign changed `32` of `46` rows relative to the earlier `verification_confidence` labels.
-- The old confidence distribution was `7` high, `14` medium, and `25` low.
-- The new `confidence_index` distribution is `22` high and `24` medium, with `0` low.
-- Among the `25` `Unable to verify` rows, `12` are now `High` and `13` are `Medium`.
-- All `25` `Unable to verify` rows now have `Targeted` or `Exhaustive` logged search coverage.
+This matters because it shows that the underlying requirement set is close to the paper's, while also showing how sensitive the final labels are to the treatment of missing public evidence. Under a stricter public-evidence rule, several paper-era `Not implemented` rows are more defensibly treated as unresolved uncertainty.
 
-That last point is important. In this framework, `High + Unable to verify` means the project has high confidence that the public record appears silent after a documented search. It does **not** mean the project is highly confident that the underlying government action did not occur.
+### 3. July 24, 2026 public-evidence update
+
+On the same 45 counted requirements, the July 24, 2026 update finds:
+
+- `12` implemented
+- `8` partially implemented
+- `24` unable to verify
+- `1` superseded or replaced
+- `0` not implemented
+
+This update should be interpreted carefully. It is a requirement-level review of public evidence, not a comprehensive agency compliance determination.
+
+### 4. July 27, 2026 row audit
+
+The row audit reviewed `36` high-risk rows and downgraded `9` of them to `Unable to verify`.
+
+The most important effect of the audit was not to produce a more dramatic result. It was to make the 2026 layer more conservative by pulling back rows that relied on broad strategic pages, indirect policy context, or weak supersession claims.
 
 ## Interpretation
 
-The combined results suggest a mixed picture rather than a simple success story.
+Three conclusions stand out.
 
-- The appendix reconstruction and blind recode are close enough to show that the project is tracking the same underlying requirement set as the paper.
-- The seven disagreements are analytically useful: they show where public-evidence coding choices, deadline logic, and whole-of-government assumptions materially affect the baseline.
-- In particular, the blind pass is less willing to call a row `Not implemented` when the obligation could have been satisfied internally but not publicly documented.
+First, the appendix-derived baseline supports the paper's broad transparency claim, but not its exact prose count of implemented requirements.
 
-- Some requirements clearly moved forward, especially the guidance and workforce pieces connected to the AI in Government Act.
-- Several `Unknown` baseline rows can still be described more precisely than they were in 2022, but the audit showed that some earlier partial or superseded judgments were not supported strongly enough by direct public evidence.
-- A large share of the tracker still cannot be verified conservatively from public evidence alone, which keeps transparency and observability at the center of the project.
-- Policy change still matters, but the audit applied a stricter standard for `Superseded or replaced` and retained that label only where the newer public requirement clearly absorbed the older coordination function.
+Second, the independent second-pass recoding shows that some apparently sharp `Not implemented` judgments soften under a stricter public-evidence interpretation. The result is fewer `Not implemented` rows and more `Unknown / Unable to verify` rows.
 
-The confidence redesign makes that interpretation sharper rather than softer.
-
-- A row can remain `Unable to verify` while carrying `High` confidence in the coding decision.
-- That combination means the logged search was broad enough that the absence of direct public evidence is itself informative about public verifiability.
-- The redesign therefore separates two ideas that were previously conflated: whether implementation is visible in public materials, and how confident the project is in that visibility judgment.
-
-## Validation Note
-
-The reconciliation task surfaced two distinct issues:
-
-1. The exact appendix row mentioned in footnote 8, `EO13960 section 5(c)(ii)`, was missing from the earlier extraction and is now restored.
-2. Once that row is restored and excluded from the counted baseline, the dataset reproduces **12 implemented, 26 unknown, and 7 not implemented** across 45 counted requirements.
-
-That means the paper's narrative sentence reporting **11 implemented** does not appear to be caused by the appendix row structure. The repository therefore treats the `11` count as a documented narrative inconsistency in the paper rather than forcing the row-level data to match it silently.
+Third, the 2026 update suggests that some requirements are easier to describe than they were in late 2022, but a large portion of the baseline still cannot be verified conservatively from public evidence alone.
 
 ## Limitations
 
-The project depends on public evidence and will likely under-observe internal actions that were not publicly disclosed.
+This project relies on public source evidence and therefore under-observes actions that may have happened internally but were not publicly documented.
 
-That limitation is especially important for both the blind recode and the July 24, 2026 pass.
+That limitation affects both the second-pass baseline recoding and the July 24, 2026 update.
 
-- In the blind pass, a more cautious standard shifts several rows from paper-era `Not implemented` or `Implemented` calls into `Unknown / Unable to verify`.
-- In the 2026 pass, several rows likely reflect real implementation activity that is not yet documented cleanly enough on public-facing government pages to justify stronger coding.
+The 2026 layer is especially scoped. It does not attempt a full agency-level replication of the original paper's broader implementation environment.
 
-The July 27 audit intentionally sharpened that constraint. If the evidence was strategic, indirect, agency-specific, or merely suggestive of later policy evolution, the row was pushed back toward `Unable to verify` rather than left in a more assertive status.
+## AI Assistance Disclosure
 
-The confidence redesign does not remove that limitation. It documents it more explicitly by tying confidence to search quality and evidence fit, rather than to the status label alone.
-
-## Next Steps
-
-Phase 1 is complete.
-
-Phase 2 is future extension work focused on agency-level depth rather than baseline publication polish:
-
-- Expand the project into a deeper agency-level validation workflow.
-- Add a more complete agency inventory and compliance-plan extension dataset.
-- Build the planned dashboard and other agency-comparison outputs on top of the audited Phase 1 baseline.
+AI assistance was used for repository scaffolding, code generation, source-search support, and draft organization. Coding decisions and interpretation were reviewed by the project author against public source evidence.

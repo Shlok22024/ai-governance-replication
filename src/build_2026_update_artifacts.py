@@ -30,12 +30,6 @@ STATUS_COLORS = {
     "No longer applicable": "#a6761d",
 }
 
-CONFIDENCE_COLORS = {
-    "High": "#1b9e77",
-    "Medium": "#7570b3",
-    "Low": "#d95f02",
-}
-
 ACCESS_DATE = "2026-07-24"
 ACCESS_DATE_LABEL = "July 24, 2026"
 
@@ -837,26 +831,6 @@ def plot_status_change_matrix(coded: pd.DataFrame) -> plt.Figure:
     return figure
 
 
-def plot_verification_confidence(coded: pd.DataFrame) -> plt.Figure:
-    """Plot counts by verification confidence."""
-    set_plot_style()
-    counts = (
-        coded["verification_confidence"]
-        .value_counts()
-        .reindex(CONFIDENCE_ORDER, fill_value=0)
-    )
-    figure, axis = plt.subplots(figsize=(8, 5))
-    axis.bar(
-        counts.index,
-        counts.values,
-        color=[CONFIDENCE_COLORS[level] for level in counts.index],
-    )
-    axis.set_title("Verification Confidence Across 2026 Coding Decisions")
-    axis.set_ylabel("Requirement count")
-    figure.tight_layout()
-    return figure
-
-
 def update_source_log() -> None:
     """Append 2026 update sources to the shared source document log if missing."""
     log_path = project_path("data", "raw", "source_documents_log.csv")
@@ -1116,9 +1090,6 @@ def main() -> None:
 
     figure_matrix = plot_status_change_matrix(coded)
     save_figure(project_path("outputs", "figures", "status_change_matrix.png"), figure_matrix)
-
-    figure_confidence = plot_verification_confidence(coded)
-    save_figure(project_path("outputs", "figures", "verification_confidence.png"), figure_confidence)
 
     update_source_log()
 

@@ -1,9 +1,9 @@
-"""Build Phase 1B blind-recoding artifacts for the original 45-row baseline.
+"""Build independent second-pass recoding artifacts for the 45-row baseline.
 
-This script intentionally treats `data/raw/original_requirements.csv` as a requirement
-list only during the initial coding pass. It does not use `appendix_status` or
-`aggregate_status` when assigning the independent `replication_status` values.
-Those paper-era fields are joined back only after the blind decisions are complete.
+This script treats `data/raw/original_requirements.csv` as a requirement list only
+during the recoding pass. It does not use `appendix_status` or `aggregate_status`
+when assigning the independent `replication_status` values. Those paper-era fields
+are joined back only after the second-pass decisions are complete.
 """
 
 from __future__ import annotations
@@ -17,14 +17,14 @@ import seaborn as sns
 from data_cleaning import load_csv, project_path, save_csv
 
 
-BLIND_STATUS_ORDER = [
+SECOND_PASS_STATUS_ORDER = [
     "Implemented",
     "Not implemented",
     "Unknown / Unable to verify",
     "Excluded because deadline had not passed",
 ]
 
-PAPER_TO_BLIND_STATUS = {
+PAPER_TO_SECOND_PASS_STATUS = {
     "Implemented": "Implemented",
     "Not implemented": "Not implemented",
     "Unknown": "Unknown / Unable to verify",
@@ -36,7 +36,7 @@ CUTOFF_LABEL = "November 15, 2022"
 
 
 def build_source_registry() -> dict[str, dict[str, str]]:
-    """Return official public sources used for the blind recoding pass."""
+    """Return official public sources used for the second-pass recoding."""
     return {
         "EO13859": {
             "url": "https://www.federalregister.gov/documents/2019/02/14/2019-02544/maintaining-american-leadership-in-artificial-intelligence",
@@ -121,8 +121,8 @@ def build_source_registry() -> dict[str, dict[str, str]]:
     }
 
 
-def build_blind_decisions() -> dict[str, dict[str, str]]:
-    """Return independent blind-coding decisions keyed by requirement id."""
+def build_second_pass_decisions() -> dict[str, dict[str, str]]:
+    """Return independent second-pass coding decisions keyed by requirement id."""
     decisions: dict[str, dict[str, str]] = {}
     sources = build_source_registry()
 
@@ -235,7 +235,7 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
         status="Not implemented",
         source_key="EO13960",
         notes=(
-            "This row required a concrete public posting or guidance deliverable. The blind "
+            "This row required a concrete public posting or guidance deliverable. The second-pass "
             "recode did not locate a matching public artifact by the study cutoff."
         ),
     )
@@ -254,7 +254,7 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
         source_key="AIGA",
         notes=(
             "This follow-on agency posting requirement depended on issuance of the OMB memo "
-            "required in section 104(a), and the blind recode did not treat that triggering "
+            "required in section 104(a), and the second-pass recoding did not treat that triggering "
             "memo as completed by the study cutoff."
         ),
     )
@@ -278,7 +278,7 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
         status="Unknown / Unable to verify",
         source_key="EO13859",
         notes=(
-            "The blind recode treated this as an ongoing, internal, or multi-part obligation "
+            "The second-pass recoding treated this as an ongoing, internal, or multi-part obligation "
             "for which public evidence before the study cutoff was not specific enough to "
             "verify completion conservatively."
         ),
@@ -296,7 +296,7 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
         status="Unknown / Unable to verify",
         source_key="EO13960",
         notes=(
-            "The blind recode treated this as an ongoing, internal, or multi-part obligation "
+            "The second-pass recoding treated this as an ongoing, internal, or multi-part obligation "
             "for which public evidence before the study cutoff was not specific enough to "
             "verify completion conservatively."
         ),
@@ -311,7 +311,7 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
         source_key="HHS_AI_INVENTORY_FY22",
         notes=(
             "A public FY2022 AI inventory showed that some agencies were publishing use-case "
-            "materials, but the blind recode did not infer full completion of the related "
+            "materials, but the second-pass recoding did not infer full completion of the related "
             "follow-on review, sharing, and planning obligations for every responsible agency."
         ),
     )
@@ -320,7 +320,7 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
         status="Unknown / Unable to verify",
         source_key="LESSONS_LEARNED_HPC",
         notes=(
-            "Public materials showed progress on AI-related computing access, but the blind "
+            "Public materials showed progress on AI-related computing access, but the second-pass "
             "recode did not find requirement-specific public proof that each named agency had "
             "prioritized high-performance computing allocations as directed."
         ),
@@ -330,7 +330,7 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
         status="Unknown / Unable to verify",
         source_key="HHS_AI_INVENTORY_FY22",
         notes=(
-            "At least one public FY2022 AI inventory was available, but the blind recode did "
+            "At least one public FY2022 AI inventory was available, but the second-pass recoding did "
             "not infer whole-of-government completion for every responsible agency from a "
             "single published inventory example."
         ),
@@ -340,7 +340,7 @@ def build_blind_decisions() -> dict[str, dict[str, str]]:
         status="Unknown / Unable to verify",
         source_key="AIGA",
         notes=(
-            "The statute describes concrete duties, but the blind recode did not locate enough "
+            "The statute describes concrete duties, but the second-pass recoding did not locate enough "
             "requirement-specific public evidence by the study cutoff to verify the full bundle "
             "conservatively."
         ),
@@ -353,83 +353,83 @@ def validate_decisions(
     counted_requirements: pd.DataFrame,
     decisions: dict[str, dict[str, str]],
 ) -> None:
-    """Raise if any counted requirement is missing a blind decision."""
+    """Raise if any counted requirement is missing a second-pass decision."""
     requirement_ids = counted_requirements["requirement_id"].tolist()
     missing = sorted(set(requirement_ids) - set(decisions))
     extra = sorted(set(decisions) - set(requirement_ids))
     if missing or extra:
         raise ValueError(
-            f"Blind recoding decisions mismatch. Missing: {missing}; Extra: {extra}"
+            f"Second-pass recoding decisions mismatch. Missing: {missing}; Extra: {extra}"
         )
 
 
 def normalize_paper_status(status: str) -> str:
-    """Map paper appendix labels onto the blind-recoding label space."""
-    return PAPER_TO_BLIND_STATUS.get(str(status), str(status))
+    """Map paper appendix labels onto the second-pass label space."""
+    return PAPER_TO_SECOND_PASS_STATUS.get(str(status), str(status))
 
 
 def build_discrepancy_reason(row: pd.Series) -> str:
-    """Explain why a blind decision disagrees with the appendix status."""
+    """Explain why a second-pass decision disagrees with the appendix status."""
     if row["agreement_with_paper"] == "Agree":
         return ""
 
     requirement_id = row["requirement_id"]
-    blind_status = row["replication_status"]
+    second_pass_status = row["replication_status"]
     paper_status = row["paper_normalized_status"]
 
     overrides = {
         "EO13859_5b": (
-            "The blind recode found public evidence of progress on computing access but not "
+            "The second-pass recoding found public evidence of progress on computing access but not "
             "clear proof that each named agency had prioritized high-performance computing "
             "allocation as the order required."
         ),
         "EO13960_5a": (
-            "The blind recode treated the existence of a public FY2022 agency AI inventory as "
+            "The second-pass recoding treated the existence of a public FY2022 agency AI inventory as "
             "sufficient evidence that public inventory guidance and a workable mechanism had "
             "been issued."
         ),
         "AIGA_104c": (
-            "The blind recode treated this as a follow-on requirement whose deadline had not "
+            "The second-pass recoding treated this as a follow-on requirement whose deadline had not "
             "yet been triggered because the prerequisite OMB memorandum was not publicly in place."
         ),
     }
     if requirement_id in overrides:
         return overrides[requirement_id]
 
-    if blind_status == "Unknown / Unable to verify" and paper_status == "Implemented":
+    if second_pass_status == "Unknown / Unable to verify" and paper_status == "Implemented":
         return (
-            "The blind recode required requirement-specific public proof of completion and did "
+            "The second-pass recoding required requirement-specific public proof of completion and did "
             "not upgrade the row from broader or indirect evidence."
         )
-    if blind_status == "Unknown / Unable to verify" and paper_status == "Not implemented":
+    if second_pass_status == "Unknown / Unable to verify" and paper_status == "Not implemented":
         return (
-            "The blind recode treated the absence of a public artifact as insufficient to prove "
+            "The second-pass recoding treated the absence of a public artifact as insufficient to prove "
             "nonimplementation where the work could have occurred internally."
         )
-    if blind_status == "Not implemented":
+    if second_pass_status == "Not implemented":
         return (
-            "The blind recode treated this as a missed public deliverable because no matching "
+            "The second-pass recoding treated this as a missed public deliverable because no matching "
             "public roadmap, list, or memo was located by the study cutoff."
         )
-    if blind_status == "Excluded because deadline had not passed":
+    if second_pass_status == "Excluded because deadline had not passed":
         return (
-            "The blind recode treated the requirement as not yet triggered by the cutoff date."
+            "The second-pass recoding treated the requirement as not yet triggered by the cutoff date."
         )
-    if blind_status == "Implemented":
+    if second_pass_status == "Implemented":
         return (
-            "The blind recode treated the located public artifact as direct enough to support "
+            "The second-pass recoding treated the located public artifact as direct enough to support "
             "implementation."
         )
-    return "The blind recode applied a more conservative public-evidence interpretation."
+    return "The second-pass recoding applied a more conservative public-evidence interpretation."
 
 
 def build_status_summary(dataframe: pd.DataFrame) -> pd.DataFrame:
-    """Aggregate blind-recoding status counts and percentages."""
+    """Aggregate second-pass recoding status counts and percentages."""
     total = len(dataframe)
     summary = (
         dataframe["replication_status"]
         .value_counts()
-        .reindex(BLIND_STATUS_ORDER, fill_value=0)
+        .reindex(SECOND_PASS_STATUS_ORDER, fill_value=0)
         .rename_axis("replication_status")
         .reset_index(name="count")
     )
@@ -437,6 +437,20 @@ def build_status_summary(dataframe: pd.DataFrame) -> pd.DataFrame:
     summary["cutoff_date"] = CUTOFF_DATE
     summary["total_requirements"] = total
     return summary
+
+
+def compute_cohens_kappa(dataframe: pd.DataFrame) -> float:
+    """Compute Cohen's kappa for second-pass agreement against the paper appendix."""
+    labels = SECOND_PASS_STATUS_ORDER
+    total = len(dataframe)
+    paper_normalized = dataframe["paper_appendix_status"].map(normalize_paper_status)
+    observed = (dataframe["replication_status"] == paper_normalized).mean()
+    second_pass_share = (
+        dataframe["replication_status"].value_counts().reindex(labels, fill_value=0) / total
+    )
+    paper_share = paper_normalized.value_counts().reindex(labels, fill_value=0) / total
+    expected = float((second_pass_share * paper_share).sum())
+    return (observed - expected) / (1 - expected)
 
 
 def build_agreement_note(dataframe: pd.DataFrame) -> str:
@@ -449,15 +463,17 @@ def build_agreement_note(dataframe: pd.DataFrame) -> str:
         .tolist()
     )
     disagreement_rows = int((dataframe["agreement_with_paper"] == "Disagree").sum())
+    kappa = compute_cohens_kappa(dataframe)
 
     lines = [
-        "# Blind Recoding Agreement Rate",
+        "# Independent Second-Pass Recoding Agreement Rate",
         "",
-        f"- Independent blind recoding cutoff: `{CUTOFF_LABEL}`",
+        f"- Independent second-pass recoding cutoff: `{CUTOFF_LABEL}`",
         f"- Counted baseline rows reviewed: `{total}`",
         f"- Rows agreeing with paper appendix status: `{agreed}`",
         f"- Rows disagreeing with paper appendix status: `{disagreement_rows}`",
         f"- Agreement rate: `{round(agreed / total * 100, 1)}%`",
+        f"- Cohen's kappa: `{round(kappa, 2)}`",
     ]
     if disagreement_counts:
         lines.extend(
@@ -465,7 +481,7 @@ def build_agreement_note(dataframe: pd.DataFrame) -> str:
                 "",
                 "## Interpretation",
                 "",
-                "Most disagreements come from the blind pass using a stricter public-evidence rule:",
+                "Most disagreements come from the second-pass coding using a stricter public-evidence rule:",
                 "if a requirement was broad, internal, or only partially evidenced, the recode held it at `Unknown / Unable to verify` instead of inferring stronger completion or noncompletion.",
             ]
         )
@@ -473,7 +489,7 @@ def build_agreement_note(dataframe: pd.DataFrame) -> str:
 
 
 def plot_comparison_heatmap(crosstab: pd.DataFrame, output_path: Path) -> None:
-    """Render a heatmap comparing blind recoding to paper appendix statuses."""
+    """Render a heatmap comparing second-pass recoding to paper appendix statuses."""
     plt.style.use("seaborn-v0_8-whitegrid")
     figure, axis = plt.subplots(figsize=(10, 6))
     sns.heatmap(
@@ -486,10 +502,10 @@ def plot_comparison_heatmap(crosstab: pd.DataFrame, output_path: Path) -> None:
         ax=axis,
     )
     axis.set_title(
-        "Independent Blind Recode vs Paper Appendix Status\n45 Counted Requirements"
+        "Independent Second-Pass Recoding vs Paper Appendix Status\n45 Counted Requirements"
     )
     axis.set_xlabel("Paper appendix status")
-    axis.set_ylabel("Blind recoding status")
+    axis.set_ylabel("Second-pass recoding status")
     figure.tight_layout()
     output_path.parent.mkdir(parents=True, exist_ok=True)
     figure.savefig(output_path, dpi=200, bbox_inches="tight")
@@ -497,7 +513,7 @@ def plot_comparison_heatmap(crosstab: pd.DataFrame, output_path: Path) -> None:
 
 
 def main() -> None:
-    """Build blind-recoding outputs from the original requirement list."""
+    """Build second-pass recoding outputs from the original requirement list."""
     raw_path = project_path("data", "raw", "original_requirements.csv")
     requirements = load_csv(raw_path)
 
@@ -506,7 +522,7 @@ def main() -> None:
         .copy()
         .reset_index(drop=True)
     )
-    blind_input = counted_requirements[
+    second_pass_input = counted_requirements[
         [
             "requirement_id",
             "source_policy",
@@ -516,33 +532,33 @@ def main() -> None:
         ]
     ].copy()
 
-    decisions = build_blind_decisions()
+    decisions = build_second_pass_decisions()
     validate_decisions(counted_requirements, decisions)
 
-    blind_rows = pd.DataFrame.from_dict(decisions, orient="index").reset_index()
-    blind_rows = blind_rows.rename(columns={"index": "requirement_id"})
+    second_pass_rows = pd.DataFrame.from_dict(decisions, orient="index").reset_index()
+    second_pass_rows = second_pass_rows.rename(columns={"index": "requirement_id"})
 
-    blind_recoding = blind_input.merge(blind_rows, on="requirement_id", how="left")
+    second_pass_recoding = second_pass_input.merge(second_pass_rows, on="requirement_id", how="left")
 
     paper_columns = counted_requirements[
         ["requirement_id", "appendix_status"]
     ].rename(columns={"appendix_status": "paper_appendix_status"})
-    blind_recoding = blind_recoding.merge(paper_columns, on="requirement_id", how="left")
-    blind_recoding["paper_normalized_status"] = blind_recoding["paper_appendix_status"].map(
+    second_pass_recoding = second_pass_recoding.merge(paper_columns, on="requirement_id", how="left")
+    second_pass_recoding["paper_normalized_status"] = second_pass_recoding["paper_appendix_status"].map(
         normalize_paper_status
     )
-    blind_recoding["agreement_with_paper"] = blind_recoding.apply(
+    second_pass_recoding["agreement_with_paper"] = second_pass_recoding.apply(
         lambda row: "Agree"
         if row["replication_status"] == row["paper_normalized_status"]
         else "Disagree",
         axis=1,
     )
-    blind_recoding["discrepancy_reason"] = blind_recoding.apply(
+    second_pass_recoding["discrepancy_reason"] = second_pass_recoding.apply(
         build_discrepancy_reason,
         axis=1,
     )
 
-    output_blind = blind_recoding[
+    output_second_pass = second_pass_recoding[
         [
             "requirement_id",
             "source_policy",
@@ -559,27 +575,27 @@ def main() -> None:
         ]
     ].copy()
 
-    summary = build_status_summary(output_blind)
+    summary = build_status_summary(output_second_pass)
     crosstab = pd.crosstab(
-        output_blind["replication_status"],
-        blind_recoding["paper_normalized_status"],
-    ).reindex(index=BLIND_STATUS_ORDER, columns=BLIND_STATUS_ORDER, fill_value=0)
-    crosstab.index.name = "blind_recoding_status"
+        output_second_pass["replication_status"],
+        second_pass_recoding["paper_normalized_status"],
+    ).reindex(index=SECOND_PASS_STATUS_ORDER, columns=SECOND_PASS_STATUS_ORDER, fill_value=0)
+    crosstab.index.name = "second_pass_recoding_status"
     crosstab.columns.name = "paper_appendix_status"
 
     processed_dir = project_path("data", "processed")
     figures_dir = project_path("outputs", "figures")
 
-    save_csv(output_blind, processed_dir / "original_blind_recoding.csv")
-    save_csv(summary, processed_dir / "blind_recoding_status_summary.csv")
-    save_csv(crosstab.reset_index(), processed_dir / "blind_recoding_vs_paper_comparison.csv")
-    (processed_dir / "blind_recoding_agreement_rate.md").write_text(
-        build_agreement_note(output_blind),
+    save_csv(output_second_pass, processed_dir / "original_second_pass_recoding.csv")
+    save_csv(summary, processed_dir / "second_pass_recoding_status_summary.csv")
+    save_csv(crosstab.reset_index(), processed_dir / "second_pass_recoding_vs_paper_comparison.csv")
+    (processed_dir / "second_pass_recoding_agreement_rate.md").write_text(
+        build_agreement_note(output_second_pass),
         encoding="utf-8",
     )
     plot_comparison_heatmap(
         crosstab,
-        figures_dir / "blind_recoding_vs_paper_appendix.png",
+        figures_dir / "second_pass_recoding_vs_paper_appendix.png",
     )
 
 
