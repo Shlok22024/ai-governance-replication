@@ -2,99 +2,123 @@
 
 ## Raw Data
 
-### `original_requirements.csv`
+### `raw/original_requirements.csv`
 
-Requirement-level extraction from the original paper.
+Requirement-level extraction from the original paper and counted-baseline reconciliation.
 
-Expected fields:
+Fields:
 
-- `requirement_id`
-- `source_policy`
-- `requirement_text`
-- `responsible_entity`
-- `deadline`
-- `original_status`
-- `aggregate_count_included`
-- `original_evidence_notes`
-- `appendix_status`
-- `aggregate_status`
-- `validation_note`
+- `requirement_id`: Stable identifier for a requirement row.
+- `source_policy`: Original legal or policy source tracked by the paper.
+- `requirement_text`: Requirement text summarized from the original source and appendix.
+- `responsible_entity`: Agency, office, or actor responsible for the requirement.
+- `deadline`: Original requirement deadline or cadence.
+- `original_status`: Earlier extraction-era status field preserved for project history.
+- `aggregate_count_included`: `Yes` if the row belongs to the paper's 45-row counted baseline, `No` otherwise.
+- `original_evidence_notes`: Notes from the original extraction pass.
+- `appendix_status`: Status label reflected in the appendix-facing tracker logic.
+- `aggregate_status`: Counted-baseline status used for the replication summary.
+- `validation_note`: Reconciliation note for appendix versus aggregate handling.
 
 Notes:
 
 - The appendix tracker contains 46 rows.
-- The counted baseline contains 45 included requirements because `EO13960 §5(c)(ii)` is explicitly excluded by the paper's footnote 8.
-- `appendix_status` preserves the tracker-facing label.
-- `aggregate_count_included` and `aggregate_status` preserve the counted-baseline logic used for the summary.
+- The counted baseline contains 45 included requirements because `EO13960 section 5(c)(ii)` is explicitly excluded by the paper's footnote 8.
 
-### `source_documents_log.csv`
+### `raw/source_documents_log.csv`
 
-Log of legal, policy, and agency source documents used in the replication and 2026 update.
+Log of public legal, policy, and agency sources used in the original replication and the 2026 update.
 
-Expected fields:
+Fields:
 
-- `document_id`
-- `document_title`
-- `document_type`
-- `issuing_body`
-- `publication_date`
-- `url`
-- `relevance_to_project`
-- `notes`
+- `document_id`: Stable document identifier used in the project log.
+- `document_title`: Public title of the document or page.
+- `document_type`: Short document-type label.
+- `issuing_body`: Issuing organization or office.
+- `publication_date`: Publication or access date in `YYYY-MM-DD` format.
+- `url`: Canonical public URL used in the project.
+- `relevance_to_project`: How the source is used in the project.
+- `notes`: Additional source-handling notes.
 
-### `agency_ai_inventory_links.csv`
+### `raw/agency_ai_inventory_links.csv`
 
-Reference table for agency AI inventory pages and related public sources.
+Reference list for agency AI inventory pages and related public sources.
 
 ## Processed Data
 
-### `requirements_coded_2026.csv`
+### `processed/requirements_coded_2026.csv`
 
-Main coded dataset combining original statuses with July 2026 public-evidence updates.
+Main audited July 24, 2026 update dataset, preserving the original baseline fields and adding the 2026 coding layer.
 
-Expected fields:
+Fields:
 
-- `requirement_id`
-- `source_policy`
-- `requirement_text`
-- `responsible_entity`
-- `requirement_type`
-- `deadline`
-- `original_status`
-- `updated_2026_status`
-- `status_change`
-- `evidence_url`
-- `evidence_date`
-- `verification_confidence`
-- `notes`
+- `requirement_id`: Stable requirement identifier.
+- `source_policy`: Original source policy tracked by the paper.
+- `requirement_text`: Requirement text used in the coding workflow.
+- `responsible_entity`: Agency, office, or actor responsible for the requirement.
+- `deadline`: Original requirement deadline or cadence.
+- `appendix_status`: Appendix-facing baseline status.
+- `aggregate_status`: Counted-baseline status used for comparison against the paper.
+- `aggregate_count_included`: Whether the row is included in the comparable 45-row baseline.
+- `updated_2026_status`: Audited 2026 status using public evidence.
+- `status_change`: Human-readable comparison label between the baseline and the 2026 status.
+- `evidence_url`: Public source URL used for the 2026 status.
+- `evidence_title`: Public title of the cited 2026 source.
+- `evidence_date`: Publication or access date for the cited source.
+- `evidence_source_type`: Short label describing the type of public evidence.
+- `verification_confidence`: Confidence rating for the 2026 coding decision.
+- `update_notes`: Short justification for the 2026 coding decision.
+- `superseded_or_replaced`: `Yes` if the requirement is coded as clearly superseded or replaced, otherwise `No`.
+- `replacement_policy_source`: Later policy source that replaced or absorbed the original requirement, if applicable.
 
-### `implementation_status_summary.csv`
+### `processed/implementation_status_summary_2026.csv`
 
-Summary metrics used for charts and reporting.
+Summary table for the audited 2026 update, including both the comparable counted baseline and the full 46-row tracker view.
 
-This file is now generated directly from `original_requirements.csv`.
+Fields:
 
-Expected fields:
+- `summary_basis`: Summary slice identifier, such as `comparable_baseline_45` or `full_tracker_46`.
+- `instrument`: Policy-source grouping or `Total`.
+- `tracker_rows`: Number of tracker rows associated with the instrument in the full dataset.
+- `excluded_count`: Number of rows excluded from the counted baseline for that instrument.
+- `total_requirements`: Number of rows included in the summary slice for that instrument.
+- `notes`: Explanation of how the summary slice should be interpreted.
+- `implemented_count`: Count of rows coded `Implemented`.
+- `implemented_pct`: Percentage of rows coded `Implemented`.
+- `partially_implemented_count`: Count of rows coded `Partially implemented`.
+- `partially_implemented_pct`: Percentage of rows coded `Partially implemented`.
+- `unable_to_verify_count`: Count of rows coded `Unable to verify`.
+- `unable_to_verify_pct`: Percentage of rows coded `Unable to verify`.
+- `not_implemented_count`: Count of rows coded `Not implemented`.
+- `not_implemented_pct`: Percentage of rows coded `Not implemented`.
+- `superseded_or_replaced_count`: Count of rows coded `Superseded or replaced`.
+- `superseded_or_replaced_pct`: Percentage of rows coded `Superseded or replaced`.
+- `no_longer_applicable_count`: Count of rows coded `No longer applicable`.
+- `no_longer_applicable_pct`: Percentage of rows coded `No longer applicable`.
 
-- `summary_basis`
-- `instrument`
-- `tracker_rows`
-- `excluded_count`
-- `total_requirements`
-- `implemented_count`
-- `unknown_count`
-- `not_implemented_count`
-- `implemented_pct`
-- `unknown_pct`
-- `not_implemented_pct`
-- `notes`
+### `processed/row_audit_2026.csv`
 
-Notes:
+Focused audit table for the highest-risk July 24, 2026 row-level decisions reviewed on Monday, July 27, 2026.
 
-- `appendix_all_rows` shows the appendix tracker with the excluded row explicitly tracked.
-- `aggregate_included_rows` shows the 45-requirement counted baseline used for replication.
-- `paper_published_narrative` stores the paper's prose claim of `11 implemented, 26 unknown, 7 not implemented`, which does not match the appendix-derived counted baseline.
+Fields:
 
-### `agency_inventory_status.csv`
+- `requirement_id`: Stable requirement identifier.
+- `source_policy`: Original source policy tracked by the paper.
+- `requirement_text`: Requirement text used during audit review.
+- `updated_2026_status`: Pre-audit status from the committed July 24, 2026 coded dataset.
+- `evidence_url`: Public evidence URL reviewed during the audit.
+- `evidence_title`: Public title of the audited evidence source.
+- `evidence_date`: Publication or access date for the audited evidence source.
+- `verification_confidence`: Pre-audit confidence label.
+- `audit_decision`: Audit action taken or recommended.
+- `audit_reason`: Short explanation for the audit decision.
+- `recommended_status`: Final recommended status after audit review.
+- `requires_manual_review`: Whether the row still needs manual review.
 
-Optional extension dataset for agency inventory tracking.
+### `processed/implementation_status_summary.csv`
+
+Original-baseline replication summary generated from `raw/original_requirements.csv`.
+
+### `processed/agency_inventory_status.csv`
+
+Optional extension dataset reserved for future agency-level inventory tracking.

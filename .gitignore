@@ -11,3 +11,12 @@ ENV/
 .DS_Store
 Thumbs.db
 tmp/
+drafts/
+.env
+.env.*
+*.log
+.vscode/
+.idea/
+.pytest_cache/
+.mypy_cache/
+*.bak

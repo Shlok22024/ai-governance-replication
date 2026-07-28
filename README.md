@@ -95,6 +95,16 @@ Current progress:
 - July 24, 2026 requirement-level coding completed in `data/processed/requirements_coded_2026.csv`
 - 2026 summary, comparison, status-change, and confidence charts regenerated from the coded dataset
 
+## Main Output Charts
+
+![Audited 2026 status summary by policy source](outputs/figures/implementation_status_2026.png)
+
+![Original baseline versus audited 2026 update](outputs/figures/original_vs_2026_comparison.png)
+
+![Status change matrix](outputs/figures/status_change_matrix.png)
+
+![Verification confidence across audited 2026 coding decisions](outputs/figures/verification_confidence.png)
+
 ## July 24, 2026 Findings
 
 Using the same 45 counted baseline requirements as the original paper, the audited update finds that the current public record supports:
@@ -155,13 +165,29 @@ The July 24, 2026 update, as tightened by the July 27 audit, is especially conse
 
 1. Create a Python environment.
 2. Install dependencies from `requirements.txt`.
-3. Use the notebooks in order:
+3. Run the original replication artifacts:
+
+```bash
+python src/build_original_replication_artifacts.py
+```
+
+4. Run the audited July 24, 2026 update artifacts:
+
+```bash
+python src/build_2026_update_artifacts.py
+```
+
+5. Run the focused row audit saved on Monday, July 27, 2026:
+
+```bash
+python src/build_row_audit_2026.py
+```
+
+6. If you want the notebook walkthrough, use the notebooks in order:
    - `01_build_requirement_dataset.ipynb`
    - `02_reproduce_original_results.ipynb`
    - `03_update_2026_status.ipynb`
    - `04_visualizations.ipynb`
-4. Use the helper modules in `src/` for validation and chart generation.
-5. Regenerate the July 24, 2026 coded update and figures with `src/build_2026_update_artifacts.py`.
 
 ## Repository Structure
 

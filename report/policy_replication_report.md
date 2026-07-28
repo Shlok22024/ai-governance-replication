@@ -64,8 +64,10 @@ The July 27 audit intentionally sharpened that constraint. If the evidence was s
 
 ## Next Steps
 
-The immediate next step is review rather than broader expansion:
+Phase 1 is complete.
 
-- Re-check any low-confidence `Partially implemented` assignments to see whether they should remain there or be downgraded to `Unable to verify`.
-- Expand the source log if additional official agency inventory or compliance pages are incorporated.
-- If the weekend MVP holds up, proceed to the deeper full-replication extension with more agency-level validation and documentation.
+Phase 2 is future extension work focused on agency-level depth rather than baseline publication polish:
+
+- Expand the project into a deeper agency-level validation workflow.
+- Add a more complete agency inventory and compliance-plan extension dataset.
+- Build the planned dashboard and other agency-comparison outputs on top of the audited Phase 1 baseline.

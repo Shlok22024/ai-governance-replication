@@ -12,6 +12,7 @@ ALLOWED_STATUSES = [
     "Partially implemented",
     "Not implemented",
     "Unable to verify",
+    "Superseded or replaced",
     "No longer applicable",
 ]
 
@@ -33,6 +34,7 @@ STATUS_RANK = {
     "Partially implemented": 3,
     "Unable to verify": 2,
     "Not implemented": 1,
+    "Superseded or replaced": 1,
     "No longer applicable": 0,
 }
 
