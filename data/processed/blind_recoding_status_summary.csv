@@ -1,0 +1,5 @@
+replication_status,count,percentage,cutoff_date,total_requirements
+Implemented,11,24.4,2022-11-15,45
+Not implemented,3,6.7,2022-11-15,45
+Unknown / Unable to verify,30,66.7,2022-11-15,45
+Excluded because deadline had not passed,1,2.2,2022-11-15,45

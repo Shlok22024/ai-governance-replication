@@ -27,7 +27,7 @@ Notes:
 
 ### `raw/source_documents_log.csv`
 
-Log of public legal, policy, and agency sources used in the original replication and the 2026 update.
+Log of public legal, policy, and agency sources used in the appendix reconstruction, the blind recoding pass, and the 2026 update.
 
 Fields:
 
@@ -45,6 +45,54 @@ Fields:
 Reference list for agency AI inventory pages and related public sources.
 
 ## Processed Data
+
+### `processed/original_blind_recoding.csv`
+
+Independent Phase 1B blind-recoding table for the 45 counted baseline requirements.
+
+Fields:
+
+- `requirement_id`: Stable requirement identifier.
+- `source_policy`: Original source policy tracked by the paper.
+- `requirement_text`: Requirement text used during blind coding.
+- `responsible_entity`: Agency, office, or actor responsible for the requirement.
+- `deadline`: Original requirement deadline or cadence.
+- `replication_status`: Independent blind-coding status using the November 15, 2022 public-evidence cutoff.
+- `replication_evidence_url`: Public source URL used in the blind pass.
+- `replication_evidence_date`: Publication or timing label for the cited blind-recoding source.
+- `replication_notes`: Short justification for the blind-coding decision.
+- `replication_confidence`: Confidence rating for the blind-coding decision.
+- `paper_appendix_status`: Appendix-era status joined back only after blind coding was complete.
+- `agreement_with_paper`: `Agree` or `Disagree` after normalizing label names across the blind and appendix status schemes.
+- `discrepancy_reason`: Short explanation for disagreements between the blind pass and the paper appendix status.
+
+### `processed/blind_recoding_status_summary.csv`
+
+Summary table for the independent blind-recoding pass.
+
+Fields:
+
+- `replication_status`: Blind-coding status category.
+- `count`: Number of rows in that category.
+- `percentage`: Percentage of the 45 counted rows in that category.
+- `cutoff_date`: Public-evidence cutoff date used for the blind recode.
+- `total_requirements`: Total number of counted baseline rows reviewed in the blind pass.
+
+### `processed/blind_recoding_vs_paper_comparison.csv`
+
+Cross-tabulation comparing blind-recoding statuses against the paper appendix statuses after label normalization.
+
+Fields:
+
+- `blind_recoding_status`: Row-axis blind-recoding status.
+- `Implemented`: Count of rows whose paper appendix status normalizes to `Implemented`.
+- `Not implemented`: Count of rows whose paper appendix status normalizes to `Not implemented`.
+- `Unknown / Unable to verify`: Count of rows whose paper appendix status normalizes to `Unknown / Unable to verify`.
+- `Excluded because deadline had not passed`: Count of rows whose paper appendix status normalizes to `Excluded because deadline had not passed`.
+
+### `processed/blind_recoding_agreement_rate.md`
+
+Short Markdown summary of blind-recoding agreement with the paper appendix.
 
 ### `processed/requirements_coded_2026.csv`
 

@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This project reproduces and extends the main findings of Lawrence, Cui, and Ho's 2023 paper on U.S. federal AI governance implementation.
+This project reconstructs, stress-tests, and extends the main findings of Lawrence, Cui, and Ho's 2023 paper on U.S. federal AI governance implementation.
 
 This deliverable is a **Phase 1 MVP**, not a full replication of every component of the original paper.
 
@@ -12,10 +12,31 @@ The original paper studied three major federal AI governance pillars and found t
 
 ## Replication Approach
 
-The replication work in this repository proceeds in two stages:
+The replication work in this repository proceeds in three stages:
 
-1. Reproduce the paper's top-line implementation summary using structured data and reusable analysis code.
-2. Build a requirement-level dataset that supports a conservative public-evidence update coded on Friday, July 24, 2026.
+1. Reconstruct the appendix tracker and the 45-row counted baseline.
+2. Run an independent blind recoding pass using only public evidence that would reasonably have been available by November 15, 2022.
+3. Build a requirement-level dataset that supports a conservative public-evidence update coded on Friday, July 24, 2026.
+
+## Blind Recoding Methodology
+
+The Phase 1B blind recode is meant to behave more like an actual replication exercise than a simple appendix transcription.
+
+- The coding pass used `original_requirements.csv` only as a requirement list during assignment.
+- The blind pass did **not** use `appendix_status` or `aggregate_status` while assigning `replication_status`.
+- After all 45 counted rows were coded, the appendix-era status labels were joined back for agreement analysis.
+
+The blind pass used four categories:
+
+- `Implemented`
+- `Not implemented`
+- `Unknown / Unable to verify`
+- `Excluded because deadline had not passed`
+
+This step matters because it separates two questions that can otherwise get blurred together:
+
+1. What status does the appendix appear to assign?
+2. What status would an independent coder assign from public evidence alone?
 
 ## 2026 Update Methodology
 
@@ -28,6 +49,17 @@ Two coding rules matter most:
 
 ## Findings
 
+The repository now has three substantive findings layers: the appendix reconstruction, the blind recode, and the July 24, 2026 update.
+
+### Blind Recoding
+
+- The blind pass coded all `45` counted requirements using a November 15, 2022 public-evidence cutoff.
+- It found `11` implemented rows, `3` not implemented rows, `30` rows that remained unknown or unable to verify, and `1` row treated as excluded because its deadline had not yet been triggered.
+- After normalizing label names, the blind pass agreed with the paper appendix on `38` of `45` rows, for an `84.4%` agreement rate.
+- The main disagreements came from the blind pass being more conservative about inferring public noncompliance from silence and more cautious about deadline-trigger logic for follow-on requirements.
+
+### July 24, 2026 Update
+
 The July 24, 2026 coding pass is complete, and a focused row audit was applied on Monday, July 27, 2026.
 
 - The full appendix tracker remains at 46 rows, including the excluded `EO13960 section 5(c)(ii)` row.
@@ -38,7 +70,11 @@ The July 24, 2026 coding pass is complete, and a focused row audit was applied o
 
 ## Interpretation
 
-The update suggests a mixed picture rather than a simple success story.
+The combined results suggest a mixed picture rather than a simple success story.
+
+- The appendix reconstruction and blind recode are close enough to show that the project is tracking the same underlying requirement set as the paper.
+- The seven disagreements are analytically useful: they show where public-evidence coding choices, deadline logic, and whole-of-government assumptions materially affect the baseline.
+- In particular, the blind pass is less willing to call a row `Not implemented` when the obligation could have been satisfied internally but not publicly documented.
 
 - Some requirements clearly moved forward, especially the guidance and workforce pieces connected to the AI in Government Act.
 - Several `Unknown` baseline rows can still be described more precisely than they were in 2022, but the audit showed that some earlier partial or superseded judgments were not supported strongly enough by direct public evidence.
@@ -58,7 +94,10 @@ That means the paper's narrative sentence reporting **11 implemented** does not 
 
 The project depends on public evidence and will likely under-observe internal actions that were not publicly disclosed.
 
-That limitation is especially important for the July 24, 2026 pass. Several rows likely reflect real implementation activity that is not yet documented cleanly enough on public-facing government pages to justify stronger coding.
+That limitation is especially important for both the blind recode and the July 24, 2026 pass.
+
+- In the blind pass, a more cautious standard shifts several rows from paper-era `Not implemented` or `Implemented` calls into `Unknown / Unable to verify`.
+- In the 2026 pass, several rows likely reflect real implementation activity that is not yet documented cleanly enough on public-facing government pages to justify stronger coding.
 
 The July 27 audit intentionally sharpened that constraint. If the evidence was strategic, indirect, agency-specific, or merely suggestive of later policy evolution, the row was pushed back toward `Unable to verify` rather than left in a more assertive status.
 
