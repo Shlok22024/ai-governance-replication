@@ -1,4 +1,4 @@
-"""Build the simplified summary-stats file for the portfolio project."""
+"""Build the simple summary-stats file for the portfolio project."""
 
 from __future__ import annotations
 
@@ -69,23 +69,23 @@ def main() -> None:
     lines = [
         "# Summary Stats",
         "",
-        "Generated from the current project data files.",
+        "These are the main counts used in the README and report.",
         "",
-        "## Appendix-Derived Baseline",
-        f"- Counted baseline rows: `{int(appendix_total['total_requirements'])}`",
-        f"- Appendix-derived counted baseline: `Implemented {int(appendix_total['implemented_count'])}`, `Unknown {int(appendix_total['unknown_count'])}`, `Not implemented {int(appendix_total['not_implemented_count'])}`",
-        f"- Paper prose count: `Implemented {int(prose_total['implemented_count'])}`, `Unknown {int(prose_total['unknown_count'])}`, `Not implemented {int(prose_total['not_implemented_count'])}`",
+        "## What the paper's appendix supports",
+        f"- Rows in the counted checklist: `{int(appendix_total['total_requirements'])}`",
+        f"- Appendix-based count: `Implemented {int(appendix_total['implemented_count'])}`, `Unknown {int(appendix_total['unknown_count'])}`, `Not implemented {int(appendix_total['not_implemented_count'])}`",
+        f"- Paper text count: `Implemented {int(prose_total['implemented_count'])}`, `Unknown {int(prose_total['unknown_count'])}`, `Not implemented {int(prose_total['not_implemented_count'])}`",
         "",
-        "## Independent Second-Pass Recoding",
+        "## What I found in my own second check",
         f"- `Implemented`: `{int(second_pass_counts.get('Implemented', 0))}`",
         f"- `Not implemented`: `{int(second_pass_counts.get('Not implemented', 0))}`",
         f"- `Unknown / Unable to verify`: `{int(second_pass_counts.get('Unknown / Unable to verify', 0))}`",
         f"- `Excluded because deadline had not passed`: `{int(second_pass_counts.get('Excluded because deadline had not passed', 0))}`",
-        f"- Agreement with paper appendix: `{agreement_count} of {second_pass_total}` (`{round(agreement_count / second_pass_total * 100, 1)}%`)",
+        f"- Agreement with the paper: `{agreement_count} of {second_pass_total}` (`{round(agreement_count / second_pass_total * 100, 1)}%`)",
         f"- Cohen's kappa: `{round(kappa, 2)}`",
-        f"- Disagreements with paper appendix: `{disagreement_count}`",
+        f"- Rows where my answer differed: `{disagreement_count}`",
         "",
-        "## July 24, 2026 Public-Evidence Update",
+        "## What newer public records showed on July 24, 2026",
         f"- `Implemented`: `{int(total_2026['implemented_count'])}`",
         f"- `Partially implemented`: `{int(total_2026['partially_implemented_count'])}`",
         f"- `Unable to verify`: `{int(total_2026['unable_to_verify_count'])}`",
@@ -93,9 +93,9 @@ def main() -> None:
         f"- `Superseded or replaced`: `{int(total_2026['superseded_or_replaced_count'])}`",
         f"- `No longer applicable`: `{int(total_2026['no_longer_applicable_count'])}`",
         "",
-        "## July 27, 2026 Row Audit",
-        f"- Audited rows: `{len(row_audit)}`",
-        f"- Downgrades to `Unable to verify`: `{downgraded}`",
+        "## Follow-up review of the hardest 2026 rows",
+        f"- Rows reviewed again: `{len(row_audit)}`",
+        f"- Rows moved to `Unable to verify`: `{downgraded}`",
     ]
 
     (processed_dir / "summary_stats.md").write_text(

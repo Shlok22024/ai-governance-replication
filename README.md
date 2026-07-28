@@ -1,142 +1,197 @@
-# Appendix Audit and Public Evidence Update of U.S. Federal AI Governance Implementation
+# Can We See AI Governance Progress?
 
-This project reconstructs and studies the requirement-level analysis from a 2023 AIES paper on U.S. federal AI governance implementation. The goal was to understand how policy requirements become coded data, reproduce the paper's appendix-derived baseline, and compare that baseline with an independent second-pass coding and a limited July 24, 2026 public-evidence update.
+*A simple reproduction and update of a 2023 study on U.S. federal AI governance*
 
-The paper studied is:
+Governments write a lot of AI rules. But a harder question is: can the public actually check whether those rules were followed?
 
-**Lawrence, Cui, and Ho (2023). _The Bureaucratic Challenge to AI Governance: An Empirical Assessment of Implementation at U.S. Federal Agencies_.**
+In this project, I studied a 2023 research paper about U.S. federal AI governance. The paper looked at 45 AI-related government requirements and checked whether each one had been completed, not completed, or could not be verified.
 
-## Key Findings
+I rebuilt that checklist, checked the paper's counts, did my own second check of the same requirements, and then looked at newer public records from 2026.
 
-1. The paper's prose reports `11` implemented requirements, but the appendix-derived counted baseline supports `12` implemented, `26` unknown, and `7` not implemented.
-2. The independent second-pass recoding agreed with the paper appendix on `38 of 45` counted requirements, or `84.4%` agreement, with `κ = 0.71`.
-3. Under a stricter public-evidence interpretation, several paper-era `Not implemented` rows are better treated as `Unknown / Unable to verify`; the paper's `7` not implemented rows become `3` not implemented in the second pass.
-4. The July 24, 2026 update should be read as a limited public-evidence review, not as proof of agency noncompliance.
+The goal was not to prove that agencies failed. The goal was simpler: understand how policy research turns legal text into data, and see how much AI governance progress can be confirmed from public records.
 
-## Study Design
+## What this project is
 
-The repository covers three linked steps:
+Think of the original paper like a long checklist.
 
-1. Appendix audit: reconstruct the 46-row tracker and the paper's 45-row counted baseline.
-2. Independent baseline recoding: code the 45 counted requirements again using public evidence that would reasonably have been available by November 15, 2022.
-3. July 24, 2026 update: review the same 45 counted requirements using later public evidence while preserving the original baseline fields.
+Each requirement is one item on that checklist. My project turns that checklist into a spreadsheet, where each row is one requirement and each column answers simple questions like:
 
-The project focuses on three source instruments:
+- What did the government say it would do?
+- Who was supposed to do it?
+- Is there public evidence that it happened?
 
-- Executive Order 13859
-- Executive Order 13960
-- The AI in Government Act of 2020
+In other words, this project is about taking legal text and turning it into something we can compare, count, and check.
 
-Later materials such as Executive Order 14110, OMB Memorandum M-24-10, Executive Order 14179, and OMB Memoranda M-25-21 and M-25-22 are used only as update-context sources for the 2026 review.
+## Why I did it
 
-## Main Results
+I wanted to understand how policy research works at the row-by-row level.
 
-### Appendix-derived baseline
+It is easy to read a paper's headline result. It is harder, and more useful, to understand how the authors turned dozens of long legal requirements into a table of answers.
 
-The reconstructed counted baseline supports:
+This project let me practice three things at once:
+
+- reading a research paper carefully
+- turning policy text into structured data
+- checking whether public records support the final claims
+
+## What I found
+
+1. The paper's text says `11` requirements were implemented, but its own appendix supports `12`.
+2. My second check agreed with the paper on `38 out of 45` requirements.
+3. Some requirements the paper called `not implemented` looked more like `unclear from public records` under a stricter evidence rule.
+4. In the 2026 update, many requirements were still hard to confirm from public information.
+5. `Unable to verify` does not mean `not done`. It means I could not find enough public evidence to confirm it.
+
+## Why it matters
+
+This matters because AI governance is not just about writing rules. It is also about whether the public can see evidence that those rules were carried out.
+
+A simple analogy is checking receipts after someone says a task was done. If there is no receipt, that does not automatically prove the task never happened. But it does mean an outside reviewer cannot confirm it.
+
+That is the main lesson of this project: public transparency and actual government action are not always the same thing.
+
+## How to read this project
+
+Think of the original paper as a checklist.
+
+Each row asks:
+
+- What did the government say it would do?
+- Who was responsible?
+- Was there public evidence that it happened?
+
+My project rebuilt that checklist and checked the answers.
+
+You can read the project in three parts:
+
+1. Check the paper's appendix and counts.
+2. Compare the paper's answers with my own second check.
+3. Look at newer public records from 2026 and see what is easier or harder to confirm.
+
+## How I did it
+
+1. I read the original paper.
+2. I rebuilt its 45-row requirement checklist.
+3. I compared the paper's text with its appendix.
+4. I did my own second check of the requirements.
+5. I updated the results using newer public records.
+6. I documented where the evidence was clear and where it was not.
+
+## Main results
+
+### First check: the paper's own appendix
+
+The appendix-based baseline supports:
 
 - `12` implemented
 - `26` unknown
 - `7` not implemented
 
-This is the main appendix-based discrepancy in the paper: the requirement-level baseline supports `12` implemented, while the prose reports `11`.
+So the first important finding is simple: the paper's text says `11` implemented, but the appendix-based count supports `12`.
 
-![Original baseline status summary](outputs/figures/implementation_status_original.png)
+![Chart showing the paper's original counts](outputs/figures/implementation_status_original.png)
 
-### Independent baseline recoding
+### Second check: my own review of the same 45 requirements
 
-The independent second-pass recoding produced:
+My second check produced:
 
 - `11` implemented
 - `3` not implemented
 - `30` unknown or unable to verify
 - `1` excluded because the deadline had not passed
 
-This is where the project is most informative as a learning exercise. Re-reading the requirements under a stricter public-evidence rule shifts several rows away from `Not implemented` and toward `Unknown / Unable to verify`.
+You can think of this like two people grading the same checklist and then comparing answers. My second check matched the paper on `38 of 45` rows, which is `84.4%` agreement, with `kappa = 0.71` (`kappa` is just a common score for how much two sets of answers agree).
 
-![Independent second-pass recoding vs paper appendix](outputs/figures/second_pass_recoding_vs_paper_appendix.png)
+The biggest difference is that I was more careful about calling something `not implemented` when the public record was thin. In several cases, I thought the more honest answer was: *I cannot confirm this from public records*.
 
-### July 24, 2026 public-evidence update
+![Chart comparing my second check with the paper's appendix](outputs/figures/second_pass_recoding_vs_paper_appendix.png)
 
-On the same 45 counted requirements, the July 24, 2026 update finds:
+### Third check: newer public records from July 24, 2026
+
+When I checked newer public records, I found:
 
 - `12` implemented
-- `8` partially implemented
-- `24` unable to verify
-- `1` superseded or replaced
+- `8` partly implemented
+- `24` I could not confirm from public records
+- `1` replaced by a newer rule
 - `0` not implemented
 
-These results should be read as a conservative review of what can be verified from public evidence. `Unable to verify` means the public record was insufficient for this project, not necessarily that the work did not happen.
+This should not be read as proof that agencies failed. It should be read as a check of what an outside person can confirm from public records.
 
-![July 24, 2026 status summary](outputs/figures/implementation_status_2026.png)
+![Chart showing what newer public records support in 2026](outputs/figures/implementation_status_2026.png)
 
-![Original baseline vs July 24, 2026 update](outputs/figures/original_vs_2026_comparison.png)
+![Chart comparing the original counts with the 2026 update](outputs/figures/original_vs_2026_comparison.png)
 
-![Status change matrix](outputs/figures/status_change_matrix.png)
+![Chart showing how rows changed between the original baseline and the 2026 update](outputs/figures/status_change_matrix.png)
 
-## Interpretation
+## Simple interpretation
 
-The appendix audit and the second-pass recoding point to the same general conclusion as the paper: many federal AI governance requirements are difficult to verify from public evidence alone. The more conservative second pass especially shows how much the final classification depends on whether the coder treats missing public artifacts as evidence of nonimplementation or as unresolved uncertainty.
+Here is the short version:
 
-The 2026 update adds a narrower point. Some obligations are easier to describe in 2026 than they were in late 2022, but a substantial share of the baseline still remains difficult to verify conservatively from public evidence alone.
+- The paper's main idea holds up: many AI governance requirements are hard to verify from public records.
+- But the exact counts depend on how strict you are about evidence.
+- My second check suggests some rows marked `not implemented` are better described as `unclear from public records`.
+- Even by July 2026, many requirements were still hard to confirm from public information.
 
-## Limitations
+## Limits of this project
 
-This repository is built around public documents. That makes it useful for studying transparency, coding choices, and visible implementation, but it also means internal actions may be under-observed.
+This project is based on public documents, not internal government records.
 
-The independent second-pass recoding was designed to reduce direct reliance on the appendix statuses during assignment, but it was not a formal blinded study. The analyst had prior exposure to the appendix during the reconstruction step.
+That means it is good for studying transparency, but it may miss work that happened behind the scenes.
 
-The July 24, 2026 review is intentionally scoped. It is a public-evidence update of the counted baseline, not a full agency-by-agency replication of the original paper.
+So if a row says `unable to verify`, that does **not** mean the work definitely was not done. It only means I could not confirm it from the public record I reviewed.
 
-## Files
+## Where to look next
 
-The core reference files are:
+If you want the main data files, start here:
 
 - `data/raw/original_requirements.csv`
 - `data/processed/original_second_pass_recoding.csv`
-- `data/processed/implementation_status_summary.csv`
-- `data/processed/implementation_status_summary_2026.csv`
 - `data/processed/requirements_coded_2026.csv`
 - `data/processed/row_audit_2026.csv`
 - `data/processed/summary_stats.md`
-- `data/data_dictionary.md`
+
+If you want the longer write-up, read:
+
 - `report/policy_replication_report.md`
 
-## AI Assistance Disclosure
+If you want field-by-field descriptions of the datasets, read:
 
-AI assistance was used for repository scaffolding, code generation, source-search support, and draft organization. Coding decisions and interpretation were reviewed by the project author against public source evidence.
+- `data/data_dictionary.md`
 
-## How to Reproduce
+## Method transparency
 
-1. Create a Python environment and install dependencies from `requirements.txt`.
-2. Regenerate the appendix-derived baseline:
+I used AI tools to help organize the repo, draft code, and structure the documentation. I reviewed the coding decisions, source evidence, and final interpretation myself. AI helped with the workflow, but the project conclusions were checked by me.
+
+## How to reproduce the files
+
+1. Install the Python packages in `requirements.txt`.
+2. Rebuild the paper's checklist and original counts:
 
 ```bash
 python src/build_original_replication_artifacts.py
 ```
 
-3. Regenerate the independent second-pass recoding outputs:
+3. Rebuild my second check:
 
 ```bash
 python src/build_second_pass_recoding_artifacts.py
 ```
 
-4. Regenerate the July 24, 2026 update outputs:
+4. Rebuild the July 24, 2026 update:
 
 ```bash
 python src/build_2026_update_artifacts.py
 ```
 
-5. Regenerate the row audit:
+5. Rebuild the audit of higher-risk rows:
 
 ```bash
 python src/build_row_audit_2026.py
 ```
 
-6. Regenerate the summary counts used in this README and the report:
+6. Rebuild the summary numbers used in this README and the report:
 
 ```bash
 python src/build_summary_stats.py
 ```
-
-The current counts quoted in this README are mirrored from `data/processed/summary_stats.md`.

@@ -1,104 +1,134 @@
-# Policy Replication Report
+# Can We See AI Governance Progress?
 
-## Overview
+*A simple reproduction and update of a 2023 study on U.S. federal AI governance*
 
-This project studies the requirement-level analysis behind Lawrence, Cui, and Ho's 2023 AIES paper on U.S. federal AI governance implementation. It does three things:
+## What this report is about
 
-1. Reconstruct the appendix-derived counted baseline from the paper.
-2. Recode the same 45 counted requirements independently using public evidence that would reasonably have been available by November 15, 2022.
-3. Compare that baseline with a limited public-evidence update coded on July 24, 2026.
+This report is about a simple question:
 
-The goal is not to claim a full end-to-end replication of every part of the paper. The goal is to understand how the requirement-level coding works, where coding judgments matter, and what can still be said from public evidence in 2026.
+**When the government says it will do something about AI, can the public actually see evidence that it happened?**
 
-## Paper Studied
+To explore that question, I studied a 2023 paper about U.S. federal AI governance. The paper looked at 45 government requirements related to AI and sorted them into categories like completed, not completed, or unclear.
 
-Lawrence, Christie, Isaac Cui, and Daniel E. Ho. 2023. _The Bureaucratic Challenge to AI Governance: An Empirical Assessment of Implementation at U.S. Federal Agencies_. Proceedings of the AAAI/ACM Conference on AI, Ethics, and Society (AIES '23).
+I rebuilt the paper's checklist, checked the paper's own numbers, did my own second check of the same 45 rows, and then looked at newer public records from July 24, 2026.
 
-The paper tracks implementation across:
+## The paper I studied
+
+The paper is:
+
+Lawrence, Christie, Isaac Cui, and Daniel E. Ho. 2023. _The Bureaucratic Challenge to AI Governance: An Empirical Assessment of Implementation at U.S. Federal Agencies_.
+
+It focused on three major U.S. government AI rules:
 
 - Executive Order 13859
 - Executive Order 13960
 - The AI in Government Act of 2020
 
-## Method
+## A simple way to think about the project
 
-### Appendix audit
+Think of the paper like a long checklist.
 
-The first step reconstructs the paper's requirement tracker as a structured dataset. This produces a 46-row appendix tracker and a 45-row counted baseline after excluding `EO13960 section 5(c)(ii)`, consistent with the paper's own footnote.
+Each checklist item says something like:
 
-### Independent baseline recoding
+- Here is what the government said it would do.
+- Here is who was supposed to do it.
+- Here is whether there was public evidence that it happened.
 
-The second step recodes the 45 counted requirements using public evidence that would reasonably have been available by November 15, 2022.
+My project turns that checklist into a spreadsheet. Each requirement becomes one row of data.
 
-This second-pass coding used `original_requirements.csv` as a requirement list during assignment and joined the appendix statuses back only after the row-level coding was complete. It was designed to reduce direct dependence on the appendix labels during assignment, but it was not a formal blinded study because the appendix reconstruction had already been completed earlier in the project.
+That makes it easier to compare answers, count results, and spot places where the paper's wording and the paper's appendix do not fully match.
 
-### July 24, 2026 public-evidence update
+## What I did
 
-The third step preserves the paper-era baseline and adds a separate 2026 coding layer. This update uses only public evidence and is intentionally conservative. If a requirement cannot be verified clearly from public documents, the row is held at `Unable to verify` rather than being pushed into a stronger claim.
+I did the project in three steps:
 
-The 2026 review should therefore be read as a limited public-evidence update, not as proof of agency noncompliance.
+1. I checked the paper's appendix and rebuilt its 45-row checklist.
+2. I did my own second check of the same 45 requirements using public evidence that would reasonably have existed by November 15, 2022.
+3. I checked newer public records from July 24, 2026 to see what could be confirmed later.
 
-## Findings
+You can think of step 2 like two people grading the same checklist and comparing answers.
 
-### 1. Appendix-derived baseline vs paper prose
+## What I found
 
-The reconstructed counted baseline supports:
+### 1. The paper's text and appendix do not fully match
+
+The paper's text says `11` requirements were implemented.
+
+But when I rebuilt the counts from the appendix-based checklist, I got:
 
 - `12` implemented
 - `26` unknown
 - `7` not implemented
 
-The paper's prose reports `11` implemented requirements. This repository treats that as a documented paper-level inconsistency between prose and appendix-derived counts, rather than silently forcing the row-level data to match the prose.
+So the first important result is that the appendix supports `12`, even though the prose says `11`.
 
-### 2. Independent second-pass recoding
+### 2. My second check was close to the paper, but not identical
 
-The independent second-pass recoding produced:
+My own second check agreed with the paper on `38 of 45` rows.
+
+That is `84.4%` agreement, with `kappa = 0.71` (`kappa` is a common score for how much two sets of answers agree).
+
+This means the paper and my review were often close, but not always. The disagreements are useful because they show where judgment matters.
+
+### 3. Stricter evidence rules change some rows
+
+Under my second check, the 45 rows became:
 
 - `11` implemented
 - `3` not implemented
 - `30` unknown or unable to verify
 - `1` excluded because the deadline had not passed
 
-Agreement with the paper appendix was `38 of 45`, or `84.4%`, with `κ = 0.71`.
+This is one of the main lessons of the project.
 
-This matters because it shows that the underlying requirement set is close to the paper's, while also showing how sensitive the final labels are to the treatment of missing public evidence. Under a stricter public-evidence rule, several paper-era `Not implemented` rows are more defensibly treated as unresolved uncertainty.
+Some rows the paper treated as `not implemented` looked more like `I could not confirm this from public records` when I applied a stricter rule.
 
-### 3. July 24, 2026 public-evidence update
+That difference matters. It is the difference between saying:
 
-On the same 45 counted requirements, the July 24, 2026 update finds:
+- "I found evidence that this did not happen"
+
+and saying:
+
+- "I could not find enough public evidence to confirm it"
+
+Those are not the same claim.
+
+### 4. Even in 2026, many rows were still hard to confirm
+
+When I checked newer public records from July 24, 2026, I found:
 
 - `12` implemented
-- `8` partially implemented
-- `24` unable to verify
-- `1` superseded or replaced
+- `8` partly implemented
+- `24` I could not confirm from public records
+- `1` replaced by a newer rule
 - `0` not implemented
 
-This update should be interpreted carefully. It is a requirement-level review of public evidence, not a comprehensive agency compliance determination.
+This does **not** prove agencies failed.
 
-### 4. July 27, 2026 row audit
+It only shows what could and could not be confirmed from public information by an outside reviewer.
 
-The row audit reviewed `36` high-risk rows and downgraded `9` of them to `Unable to verify`.
+## Why this matters
 
-The most important effect of the audit was not to produce a more dramatic result. It was to make the 2026 layer more conservative by pulling back rows that relied on broad strategic pages, indirect policy context, or weak supersession claims.
+This project matters because public policy is not just about writing rules. It is also about whether the public can see enough evidence to check progress.
 
-## Interpretation
+A good analogy is checking receipts after someone says they finished a task. If the receipts are missing, you may not be able to confirm the claim, even if some work really was done.
 
-Three conclusions stand out.
+That is what happened in many rows here. The issue was often public visibility, not necessarily proven failure.
 
-First, the appendix-derived baseline supports the paper's broad transparency claim, but not its exact prose count of implemented requirements.
+## Limits of this project
 
-Second, the independent second-pass recoding shows that some apparently sharp `Not implemented` judgments soften under a stricter public-evidence interpretation. The result is fewer `Not implemented` rows and more `Unknown / Unable to verify` rows.
+This project depends on public records.
 
-Third, the 2026 update suggests that some requirements are easier to describe than they were in late 2022, but a large portion of the baseline still cannot be verified conservatively from public evidence alone.
+That means it may miss work that happened inside agencies but was never clearly published.
 
-## Limitations
+So when a row says `unable to verify`, the meaning is simple:
 
-This project relies on public source evidence and therefore under-observes actions that may have happened internally but were not publicly documented.
+**I could not confirm it from public records.**
 
-That limitation affects both the second-pass baseline recoding and the July 24, 2026 update.
+It does **not** automatically mean:
 
-The 2026 layer is especially scoped. It does not attempt a full agency-level replication of the original paper's broader implementation environment.
+**the work was not done.**
 
-## AI Assistance Disclosure
+## Method transparency
 
-AI assistance was used for repository scaffolding, code generation, source-search support, and draft organization. Coding decisions and interpretation were reviewed by the project author against public source evidence.
+I used AI tools to help organize the repo, draft code, and structure the documentation. I reviewed the coding decisions, source evidence, and final interpretation myself. AI helped with the workflow, but the project conclusions were checked by me.

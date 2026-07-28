@@ -737,8 +737,8 @@ def plot_2026_status_summary(summary: pd.DataFrame) -> plt.Figure:
         )
         cumulative += values
 
-    axis.set_title(f"Status Summary on {ACCESS_DATE_LABEL} by Policy Source")
-    axis.set_xlabel("Percent of counted baseline requirements")
+    axis.set_title(f"What public records showed on {ACCESS_DATE_LABEL}")
+    axis.set_xlabel("Percent of the 45-row checklist")
     axis.set_xlim(0, 100)
     axis.legend(frameon=False, ncol=3, bbox_to_anchor=(0.5, 1.02), loc="lower center")
     figure.tight_layout()
@@ -765,7 +765,7 @@ def plot_original_vs_2026_comparison(
     comparison = pd.DataFrame(
         [
             {
-                "label": "Original baseline (Nov 2022 logic)",
+                "label": "Original paper baseline",
                 "Implemented": float(original_total["implemented_pct"]),
                 "Partially implemented": 0.0,
                 "Unable to verify": float(original_total["unknown_pct"]),
@@ -796,8 +796,8 @@ def plot_original_vs_2026_comparison(
         )
         cumulative += comparison[status]
 
-    axis.set_title(f"Original Baseline vs {ACCESS_DATE_LABEL} Update")
-    axis.set_xlabel("Percent of counted baseline requirements")
+    axis.set_title(f"Original baseline vs {ACCESS_DATE_LABEL}")
+    axis.set_xlabel("Percent of the 45-row checklist")
     axis.set_xlim(0, 100)
     axis.legend(frameon=False, ncol=3, bbox_to_anchor=(0.5, 1.02), loc="lower center")
     figure.tight_layout()
@@ -820,7 +820,7 @@ def plot_status_change_matrix(coded: pd.DataFrame) -> plt.Figure:
     axis.set_xticklabels(matrix.columns, rotation=30, ha="right")
     axis.set_yticks(range(len(matrix.index)))
     axis.set_yticklabels(matrix.index)
-    axis.set_title("Status Change Matrix: Original Aggregate Status vs July 2026 Status")
+    axis.set_title("How rows changed between the original baseline and 2026")
 
     for i in range(matrix.shape[0]):
         for j in range(matrix.shape[1]):

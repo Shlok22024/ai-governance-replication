@@ -1,13 +1,13 @@
-# Independent Second-Pass Recoding Agreement Rate
+# My Second Check vs the Paper
 
-- Independent second-pass recoding cutoff: `November 15, 2022`
-- Counted baseline rows reviewed: `45`
-- Rows agreeing with paper appendix status: `38`
-- Rows disagreeing with paper appendix status: `7`
+- Date used for the second check: `November 15, 2022`
+- Rows reviewed: `45`
+- Rows where my answer matched the paper: `38`
+- Rows where my answer differed: `7`
 - Agreement rate: `84.4%`
 - Cohen's kappa: `0.71`
 
-## Interpretation
+## What this means
 
-Most disagreements come from the second-pass coding using a stricter public-evidence rule:
-if a requirement was broad, internal, or only partially evidenced, the recode held it at `Unknown / Unable to verify` instead of inferring stronger completion or noncompletion.
+A simple way to think about this is two people grading the same checklist and then comparing answers.
+Most differences came from using a stricter evidence rule. If a requirement was broad, internal, or only partly supported by public records, I treated it as `Unknown / Unable to verify` instead of making a stronger claim.

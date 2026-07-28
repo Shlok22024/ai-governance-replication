@@ -1,183 +1,186 @@
 # Data Dictionary
 
-## Raw Data
+This file explains the main project files in plain language.
+
+A simple way to think about the project is this:
+
+- the paper is a checklist
+- the datasets are spreadsheet versions of that checklist
+- each row is one requirement
+- each column answers a question about that requirement
+
+## Raw data
 
 ### `raw/original_requirements.csv`
 
-Requirement-level reconstruction of the paper's appendix tracker and counted-baseline logic.
+This is the rebuilt checklist from the original paper.
 
-Fields:
+Each row is one requirement from a law, executive order, or memo.
 
-- `requirement_id`: Stable identifier for a requirement row.
-- `source_policy`: Original legal or policy source tracked by the paper.
-- `requirement_text`: Requirement text summarized from the original source and appendix.
-- `responsible_entity`: Agency, office, or actor responsible for the requirement.
-- `deadline`: Original requirement deadline or cadence.
-- `original_status`: Earlier extraction-era status field preserved for project history.
-- `aggregate_count_included`: `Yes` if the row belongs to the paper's 45-row counted baseline, `No` otherwise.
-- `original_evidence_notes`: Notes from the original extraction pass.
-- `appendix_status`: Status label reflected in the appendix-facing tracker logic.
-- `aggregate_status`: Counted-baseline status used for the baseline summary.
-- `validation_note`: Reconciliation note for appendix versus aggregate handling.
+Main columns:
 
-Notes:
+- `requirement_id`: a short ID for the row
+- `source_policy`: which law, executive order, or memo the row comes from
+- `requirement_text`: the requirement written in plain text
+- `responsible_entity`: who was supposed to do it
+- `deadline`: when it was supposed to happen, if the rule gave a date
+- `appendix_status`: the status shown by the paper's appendix logic
+- `aggregate_status`: the status used in the paper's counted baseline
+- `aggregate_count_included`: whether the row is part of the paper's 45 counted rows
+- `validation_note`: notes about how the row was handled during the rebuild
 
-- The appendix tracker contains `46` rows.
-- The counted baseline contains `45` included requirements because `EO13960 section 5(c)(ii)` is explicitly excluded by the paper's footnote 8.
+Helpful note:
+
+- The full tracker has `46` rows.
+- The paper's counted baseline uses `45` rows because one row was excluded by the paper's own footnote.
 
 ### `raw/source_documents_log.csv`
 
-Log of public legal, policy, and agency sources used in the appendix reconstruction, the independent second-pass recoding, and the 2026 update.
+This is the source list for the project.
 
-Fields:
+It works like a reading log. It records the public documents, web pages, PDFs, and government sources used during the project.
 
-- `document_id`: Stable document identifier used in the project log.
-- `document_title`: Public title of the document or page.
-- `document_type`: Short document-type label.
-- `issuing_body`: Issuing organization or office.
-- `publication_date`: Publication or access date in `YYYY-MM-DD` format.
-- `url`: Canonical public URL used in the project.
-- `relevance_to_project`: How the source is used in the project.
-- `notes`: Additional source-handling notes.
+Main columns:
+
+- `document_id`: source ID
+- `document_title`: title of the document or page
+- `document_type`: what kind of source it is
+- `issuing_body`: who published it
+- `publication_date`: when it was published
+- `url`: where it can be found
+- `relevance_to_project`: why it matters for this project
+- `notes`: extra notes
 
 ### `raw/agency_ai_inventory_links.csv`
 
-Reference list for agency AI inventory pages and related public sources.
+This is a simple reference list of agency AI inventory pages and related links.
 
-## Processed Data
+## Processed data
 
 ### `processed/original_second_pass_recoding.csv`
 
-Independent second-pass recoding table for the 45 counted baseline requirements.
+This file contains my own second check of the 45 counted requirements.
 
-Fields:
+Think of it like grading the same checklist a second time and then comparing answers.
 
-- `requirement_id`: Stable requirement identifier.
-- `source_policy`: Original source policy tracked by the paper.
-- `requirement_text`: Requirement text used during second-pass coding.
-- `responsible_entity`: Agency, office, or actor responsible for the requirement.
-- `deadline`: Original requirement deadline or cadence.
-- `replication_status`: Independent second-pass status using the November 15, 2022 public-evidence cutoff.
-- `replication_evidence_url`: Public source URL used in the second pass.
-- `replication_evidence_date`: Publication or timing label for the cited second-pass source.
-- `replication_notes`: Short justification for the second-pass coding decision.
-- `paper_appendix_status`: Appendix-era status joined back only after second-pass coding was complete.
-- `agreement_with_paper`: `Agree` or `Disagree` after normalizing label names across the second-pass and appendix status schemes.
-- `discrepancy_reason`: Short explanation for disagreements between the second pass and the paper appendix status.
+Main columns:
+
+- `requirement_id`: row ID
+- `source_policy`: which law, executive order, or memo it comes from
+- `requirement_text`: the requirement itself
+- `responsible_entity`: who was supposed to do it
+- `deadline`: timing for the requirement
+- `replication_status`: my answer for that row
+- `replication_evidence_url`: the main public source I used
+- `replication_evidence_date`: date of that source
+- `replication_notes`: short explanation of my decision
+- `paper_appendix_status`: the paper's appendix answer for the same row
+- `agreement_with_paper`: whether my answer matched the paper
+- `discrepancy_reason`: short explanation when the answers did not match
 
 ### `processed/second_pass_recoding_status_summary.csv`
 
-Summary table for the independent second-pass recoding.
+This is the simple count table for my second check.
 
-Fields:
+It tells you how many rows ended up as:
 
-- `replication_status`: Second-pass status category.
-- `count`: Number of rows in that category.
-- `percentage`: Percentage of the 45 counted rows in that category.
-- `cutoff_date`: Public-evidence cutoff date used for the second pass.
-- `total_requirements`: Total number of counted baseline rows reviewed in the second pass.
+- implemented
+- not implemented
+- unknown or unable to verify
+- excluded because the deadline had not passed
 
 ### `processed/second_pass_recoding_vs_paper_comparison.csv`
 
-Cross-tabulation comparing second-pass statuses against the paper appendix statuses after label normalization.
+This file compares my second check with the paper's appendix.
 
-Fields:
-
-- `second_pass_recoding_status`: Row-axis second-pass status.
-- `Implemented`: Count of rows whose paper appendix status normalizes to `Implemented`.
-- `Not implemented`: Count of rows whose paper appendix status normalizes to `Not implemented`.
-- `Unknown / Unable to verify`: Count of rows whose paper appendix status normalizes to `Unknown / Unable to verify`.
-- `Excluded because deadline had not passed`: Count of rows whose paper appendix status normalizes to `Excluded because deadline had not passed`.
+You can think of it like a score table showing where two graders matched and where they did not.
 
 ### `processed/second_pass_recoding_agreement_rate.md`
 
-Short Markdown summary of agreement between the independent second-pass recoding and the paper appendix.
+This is a short plain-English summary of the agreement result, including:
+
+- how many rows matched
+- the percent agreement
+- Cohen's kappa
 
 ### `processed/implementation_status_summary.csv`
 
-Original-baseline summary generated from `raw/original_requirements.csv`.
+This is the baseline count table rebuilt from the paper's checklist.
+
+It is the file that supports the finding that the appendix-based count is `12` implemented even though the paper's prose says `11`.
 
 ### `processed/requirements_coded_2026.csv`
 
-Main July 24, 2026 update dataset, preserving the original baseline fields and adding the 2026 coding layer.
+This is the July 24, 2026 update file.
 
-Fields:
+It keeps the original baseline columns and adds a newer check based on later public records.
 
-- `requirement_id`: Stable requirement identifier.
-- `source_policy`: Original source policy tracked by the paper.
-- `requirement_text`: Requirement text used in the coding workflow.
-- `responsible_entity`: Agency, office, or actor responsible for the requirement.
-- `deadline`: Original requirement deadline or cadence.
-- `appendix_status`: Appendix-facing baseline status.
-- `aggregate_status`: Counted-baseline status used for comparison against the paper.
-- `aggregate_count_included`: Whether the row is included in the comparable 45-row baseline.
-- `updated_2026_status`: July 24, 2026 status using public evidence.
-- `status_change`: Human-readable comparison label between the baseline and the 2026 status.
-- `evidence_url`: Public source URL used for the 2026 status.
-- `evidence_title`: Public title of the cited 2026 source.
-- `evidence_date`: Publication or access date for the cited source.
-- `evidence_source_type`: Short label describing the type of public evidence.
-- `verification_confidence`: Coding confidence from the July 24, 2026 update pass.
-- `update_notes`: Short justification for the 2026 coding decision.
-- `superseded_or_replaced`: `Yes` if the requirement is coded as clearly superseded or replaced, otherwise `No`.
-- `replacement_policy_source`: Later policy source that replaced or absorbed the original requirement, if applicable.
+Main columns:
+
+- `requirement_id`: row ID
+- `source_policy`: which law, executive order, or memo it comes from
+- `requirement_text`: the requirement itself
+- `responsible_entity`: who was supposed to do it
+- `deadline`: timing for the requirement
+- `appendix_status`: paper appendix answer
+- `aggregate_status`: baseline counted answer
+- `aggregate_count_included`: whether the row is in the 45 counted baseline
+- `updated_2026_status`: what the row looked like when I checked newer public records
+- `status_change`: how the 2026 result compares with the baseline
+- `evidence_url`: main public source used for the 2026 check
+- `evidence_title`: title of that source
+- `evidence_date`: date of that source
+- `evidence_source_type`: what kind of source it is
+- `verification_confidence`: confidence label from the 2026 coding pass
+- `update_notes`: short explanation of the 2026 decision
+- `superseded_or_replaced`: whether a newer rule clearly replaced the older one
+- `replacement_policy_source`: the newer rule, if there is one
+
+Important note:
+
+- `Unable to verify` means I could not confirm it from public records.
+- It does **not** automatically mean the work was not done.
 
 ### `processed/implementation_status_summary_2026.csv`
 
-Summary table for the July 24, 2026 update, including both the comparable counted baseline and the full 46-row tracker view.
+This is the count table for the July 24, 2026 update.
 
-Fields:
+It summarizes how many rows looked:
 
-- `summary_basis`: Summary slice identifier, such as `comparable_baseline_45` or `full_tracker_46`.
-- `instrument`: Policy-source grouping or `Total`.
-- `tracker_rows`: Number of tracker rows associated with the instrument in the full dataset.
-- `excluded_count`: Number of rows excluded from the counted baseline for that instrument.
-- `total_requirements`: Number of rows included in the summary slice for that instrument.
-- `notes`: Explanation of how the summary slice should be interpreted.
-- `implemented_count`: Count of rows coded `Implemented`.
-- `implemented_pct`: Percentage of rows coded `Implemented`.
-- `partially_implemented_count`: Count of rows coded `Partially implemented`.
-- `partially_implemented_pct`: Percentage of rows coded `Partially implemented`.
-- `unable_to_verify_count`: Count of rows coded `Unable to verify`.
-- `unable_to_verify_pct`: Percentage of rows coded `Unable to verify`.
-- `not_implemented_count`: Count of rows coded `Not implemented`.
-- `not_implemented_pct`: Percentage of rows coded `Not implemented`.
-- `superseded_or_replaced_count`: Count of rows coded `Superseded or replaced`.
-- `superseded_or_replaced_pct`: Percentage of rows coded `Superseded or replaced`.
-- `no_longer_applicable_count`: Count of rows coded `No longer applicable`.
-- `no_longer_applicable_pct`: Percentage of rows coded `No longer applicable`.
+- implemented
+- partly implemented
+- unclear from public records
+- not implemented
+- replaced by a newer rule
 
 ### `processed/row_audit_2026.csv`
 
-Focused audit table for the highest-risk July 24, 2026 row-level decisions reviewed on Monday, July 27, 2026.
+This is the follow-up review of the hardest 2026 rows.
 
-Fields:
+Think of it like checking the toughest answers one more time before finalizing the spreadsheet.
 
-- `requirement_id`: Stable requirement identifier.
-- `source_policy`: Original source policy tracked by the paper.
-- `requirement_text`: Requirement text used during audit review.
-- `updated_2026_status`: Status from the July 24, 2026 coded dataset.
-- `evidence_url`: Public evidence URL reviewed during the audit.
-- `evidence_title`: Public title of the audited evidence source.
-- `evidence_date`: Publication or access date for the audited evidence source.
-- `verification_confidence`: Confidence label carried from the July 24, 2026 coding pass.
-- `audit_decision`: Audit action taken or recommended.
-- `audit_reason`: Short explanation for the audit decision.
-- `recommended_status`: Final recommended status after audit review.
-- `requires_manual_review`: Whether the row still needs manual review.
+Main columns:
+
+- `requirement_id`: row ID
+- `updated_2026_status`: the earlier 2026 answer
+- `audit_decision`: what the audit decided to do
+- `audit_reason`: why
+- `recommended_status`: the final suggested answer after the audit
 
 ### `processed/summary_stats.md`
 
-Generated Markdown summary of the current authoritative project counts.
+This is the short summary file for the whole project.
 
-Contents:
+It gives the main numbers used in the README and report, including:
 
-- Appendix-derived baseline counts
-- Independent second-pass recoding counts
-- Agreement rate and Cohen's kappa
-- July 24, 2026 update counts
-- July 27, 2026 row-audit counts
+- the paper's appendix-based counts
+- my second-check counts
+- the agreement result
+- the 2026 counts
+- the row-audit counts
 
 ### `processed/agency_inventory_status.csv`
 
-Reserved dataset from earlier exploration. It is not used in the core reproduction workflow described in the README.
+This is a leftover exploration file from earlier work.
+
+It is not part of the main story of the project.

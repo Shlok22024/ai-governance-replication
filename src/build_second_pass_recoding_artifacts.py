@@ -466,12 +466,12 @@ def build_agreement_note(dataframe: pd.DataFrame) -> str:
     kappa = compute_cohens_kappa(dataframe)
 
     lines = [
-        "# Independent Second-Pass Recoding Agreement Rate",
+        "# My Second Check vs the Paper",
         "",
-        f"- Independent second-pass recoding cutoff: `{CUTOFF_LABEL}`",
-        f"- Counted baseline rows reviewed: `{total}`",
-        f"- Rows agreeing with paper appendix status: `{agreed}`",
-        f"- Rows disagreeing with paper appendix status: `{disagreement_rows}`",
+        f"- Date used for the second check: `{CUTOFF_LABEL}`",
+        f"- Rows reviewed: `{total}`",
+        f"- Rows where my answer matched the paper: `{agreed}`",
+        f"- Rows where my answer differed: `{disagreement_rows}`",
         f"- Agreement rate: `{round(agreed / total * 100, 1)}%`",
         f"- Cohen's kappa: `{round(kappa, 2)}`",
     ]
@@ -479,10 +479,10 @@ def build_agreement_note(dataframe: pd.DataFrame) -> str:
         lines.extend(
             [
                 "",
-                "## Interpretation",
+                "## What this means",
                 "",
-                "Most disagreements come from the second-pass coding using a stricter public-evidence rule:",
-                "if a requirement was broad, internal, or only partially evidenced, the recode held it at `Unknown / Unable to verify` instead of inferring stronger completion or noncompletion.",
+                "A simple way to think about this is two people grading the same checklist and then comparing answers.",
+                "Most differences came from using a stricter evidence rule. If a requirement was broad, internal, or only partly supported by public records, I treated it as `Unknown / Unable to verify` instead of making a stronger claim.",
             ]
         )
     return "\n".join(lines) + "\n"
@@ -501,11 +501,9 @@ def plot_comparison_heatmap(crosstab: pd.DataFrame, output_path: Path) -> None:
         cbar=False,
         ax=axis,
     )
-    axis.set_title(
-        "Independent Second-Pass Recoding vs Paper Appendix Status\n45 Counted Requirements"
-    )
-    axis.set_xlabel("Paper appendix status")
-    axis.set_ylabel("Second-pass recoding status")
+    axis.set_title("My Second Check vs the Paper\n45 Requirements")
+    axis.set_xlabel("Paper's answer")
+    axis.set_ylabel("My answer")
     figure.tight_layout()
     output_path.parent.mkdir(parents=True, exist_ok=True)
     figure.savefig(output_path, dpi=200, bbox_inches="tight")
