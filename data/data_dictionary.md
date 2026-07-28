@@ -40,6 +40,24 @@ Fields:
 - `relevance_to_project`: How the source is used in the project.
 - `notes`: Additional source-handling notes.
 
+### `raw/search_log.csv`
+
+Requirement-level search log for the 2026 evidence-quality confidence redesign.
+
+Fields:
+
+- `requirement_id`: Stable requirement identifier linked to the 2026 update layer.
+- `url`: Distinct URL reviewed for that requirement during the redesign pass.
+- `source_title`: Public title or expected title of the reviewed page or artifact.
+- `date_checked`: Date the URL was reviewed in the redesign pass.
+- `result`: Search outcome label. Allowed values are `Supports`, `Partial support`, `Context only`, `No evidence`, `Dead link`, and `Not relevant`.
+- `notes`: Short explanation of how the URL was interpreted for that requirement.
+
+Notes:
+
+- `sources_checked` in `requirements_coded_2026.csv` is derived from the count of distinct `url` values per `requirement_id` in this file.
+- The confidence redesign currently applies to the 2026 update layer first and has not yet been extended to `original_blind_recoding.csv`.
+
 ### `raw/agency_ai_inventory_links.csv`
 
 Reference list for agency AI inventory pages and related public sources.
@@ -115,9 +133,44 @@ Fields:
 - `evidence_date`: Publication or access date for the cited source.
 - `evidence_source_type`: Short label describing the type of public evidence.
 - `verification_confidence`: Confidence rating for the 2026 coding decision.
+- `previous_verification_confidence`: Copy of the pre-redesign confidence label preserved for comparison.
+- `evidence_found`: Branch selector for the confidence framework. `Yes` means direct supporting evidence was located for the assigned status; `No` means the confidence score is based on the quality and breadth of a documented search.
+- `evidence_specificity`: How directly the located evidence maps to the requirement. Blank when `evidence_found = No`.
+- `evidence_temporal_fit`: Whether the evidence is current, historical-but-still-applicable, context-shifted, unclear, or not applicable.
+- `search_scope`: Search-breadth label derived from the logged URL count for that requirement.
+- `sources_checked`: Count of distinct URLs reviewed for that requirement, derived from `raw/search_log.csv`.
+- `confidence_index`: Derived evidence-quality confidence label (`High`, `Medium`, `Low`) computed from the fields above. It measures confidence in the coding decision, not confidence that implementation happened.
+- `confidence_changed`: `Yes` if `confidence_index` differs from `previous_verification_confidence`, otherwise `No`.
 - `update_notes`: Short justification for the 2026 coding decision.
 - `superseded_or_replaced`: `Yes` if the requirement is coded as clearly superseded or replaced, otherwise `No`.
 - `replacement_policy_source`: Later policy source that replaced or absorbed the original requirement, if applicable.
+
+Notes:
+
+- `High + Unable to verify` means the project has high confidence that the public record appears silent after a documented search. It does **not** mean the project is highly confident that implementation did not happen.
+
+### `processed/confidence_recode_summary.csv`
+
+Compact summary table for the 2026 evidence-quality confidence redesign.
+
+Fields:
+
+- `summary_type`: Summary slice label, such as `overview`, `previous_confidence`, `confidence_index`, `confidence_changed`, `search_scope_by_status`, or `confidence_index_by_status`.
+- `group`: Grouping label for the summary row, such as `all_rows` or a specific `updated_2026_status` value.
+- `label`: The category being counted within that summary slice.
+- `count`: Number of rows in that category.
+
+### `processed/confidence_collinearity_report.csv`
+
+Diagnostic report showing whether any 2026 status still maps too strongly to one confidence label after the redesign.
+
+Fields:
+
+- `status`: `updated_2026_status` value being evaluated.
+- `n`: Number of rows with that status.
+- `dominant_value`: Confidence label with the largest share within that status.
+- `dominant_share`: Share of rows in that status assigned to `dominant_value`.
+- `flagged`: Whether `dominant_share` exceeds the configured threshold of `0.70`.
 
 ### `processed/implementation_status_summary_2026.csv`
 

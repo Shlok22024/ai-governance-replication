@@ -47,6 +47,14 @@ Two coding rules matter most:
 - The original baseline fields remain untouched so the paper replication and the 2026 update can be compared side by side.
 - Weak or indirect public evidence is treated conservatively. When the public record does not clearly prove completion, the row is coded as `Unable to verify` or given lower confidence rather than upgraded aggressively.
 
+The evidence-quality redesign adds a second layer on top of those status decisions.
+
+- `search_log.csv` records the URLs reviewed for each requirement during the confidence pass.
+- `sources_checked` is derived from distinct URLs in that log, rather than hand-entered.
+- `confidence_index` is then derived from `evidence_found`, `evidence_specificity`, `evidence_temporal_fit`, `search_scope`, and `sources_checked`.
+- `confidence_index` measures confidence in the coding decision itself. It does **not** measure confidence that implementation happened.
+- This framework currently applies to the **2026 update layer first**. The blind-recoding layer has not yet been recoded under the same framework.
+
 ## Findings
 
 The repository now has three substantive findings layers: the appendix reconstruction, the blind recode, and the July 24, 2026 update.
@@ -68,6 +76,17 @@ The July 24, 2026 coding pass is complete, and a focused row audit was applied o
 - No counted requirement is coded `Not implemented` in 2026. That does not mean every obligation is complete; it reflects the deliberate choice to avoid over-classifying weak public evidence.
 - The row audit reviewed `36` high-risk rows and downgraded `9` of them to `Unable to verify`.
 
+### Evidence-Quality Confidence Redesign
+
+- The redesign logged requirement-level search activity in `data/raw/search_log.csv`.
+- It derived `sources_checked` from distinct URLs per requirement and then recomputed confidence with the uploaded `confidence_rules.py` logic.
+- The redesign changed `32` of `46` rows relative to the earlier `verification_confidence` labels.
+- The old confidence distribution was `7` high, `14` medium, and `25` low.
+- The new `confidence_index` distribution is `22` high and `24` medium, with `0` low.
+- Among the `25` `Unable to verify` rows, `12` are now `High` and `13` are `Medium`.
+
+That last point is important. In this framework, `High + Unable to verify` means the project has high confidence that the public record appears silent after a documented search. It does **not** mean the project is highly confident that the underlying government action did not occur.
+
 ## Interpretation
 
 The combined results suggest a mixed picture rather than a simple success story.
@@ -80,6 +99,12 @@ The combined results suggest a mixed picture rather than a simple success story.
 - Several `Unknown` baseline rows can still be described more precisely than they were in 2022, but the audit showed that some earlier partial or superseded judgments were not supported strongly enough by direct public evidence.
 - A large share of the tracker still cannot be verified conservatively from public evidence alone, which keeps transparency and observability at the center of the project.
 - Policy change still matters, but the audit applied a stricter standard for `Superseded or replaced` and retained that label only where the newer public requirement clearly absorbed the older coordination function.
+
+The confidence redesign makes that interpretation sharper rather than softer.
+
+- A row can remain `Unable to verify` while carrying `High` confidence in the coding decision.
+- That combination means the logged search was broad enough that the absence of direct public evidence is itself informative about public verifiability.
+- The redesign therefore separates two ideas that were previously conflated: whether implementation is visible in public materials, and how confident the project is in that visibility judgment.
 
 ## Validation Note
 
@@ -100,6 +125,8 @@ That limitation is especially important for both the blind recode and the July 2
 - In the 2026 pass, several rows likely reflect real implementation activity that is not yet documented cleanly enough on public-facing government pages to justify stronger coding.
 
 The July 27 audit intentionally sharpened that constraint. If the evidence was strategic, indirect, agency-specific, or merely suggestive of later policy evolution, the row was pushed back toward `Unable to verify` rather than left in a more assertive status.
+
+The confidence redesign does not remove that limitation. It documents it more explicitly by tying confidence to search quality and evidence fit, rather than to the status label alone.
 
 ## Next Steps
 

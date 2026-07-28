@@ -1,0 +1,23 @@
+summary_type,group,label,count
+overview,all_rows,total_rows,46
+overview,all_rows,confidence_changed_yes,32
+overview,all_rows,unable_to_verify_rows,25
+previous_confidence,all_rows,Low,25
+previous_confidence,all_rows,Medium,14
+previous_confidence,all_rows,High,7
+confidence_index,all_rows,Medium,24
+confidence_index,all_rows,High,22
+confidence_changed,all_rows,Yes,32
+confidence_changed,all_rows,No,14
+search_scope_by_status,Implemented,Targeted,12
+confidence_index_by_status,Implemented,High,7
+confidence_index_by_status,Implemented,Medium,5
+search_scope_by_status,Partially implemented,Targeted,8
+confidence_index_by_status,Partially implemented,High,3
+confidence_index_by_status,Partially implemented,Medium,5
+search_scope_by_status,Unable to verify,Exhaustive,12
+search_scope_by_status,Unable to verify,Targeted,13
+confidence_index_by_status,Unable to verify,High,12
+confidence_index_by_status,Unable to verify,Medium,13
+search_scope_by_status,Superseded or replaced,Targeted,1
+confidence_index_by_status,Superseded or replaced,Medium,1

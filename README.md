@@ -45,6 +45,7 @@ This repository is structured in three layers:
 The repository currently includes:
 
 - `data/raw/source_documents_log.csv` for the paper, original policy texts, blind-recoding evidence sources, and official update-period sources
+- `data/raw/search_log.csv` for requirement-level URLs reviewed during the 2026 evidence-quality confidence redesign
 - `data/raw/original_requirements.csv` with the full appendix tracker plus counted-baseline flags
 - `data/processed/original_blind_recoding.csv` with the independent Phase 1B blind-coding pass for the 45 counted rows
 - `data/processed/blind_recoding_status_summary.csv` with the blind-recoding count distribution
@@ -52,6 +53,8 @@ The repository currently includes:
 - `data/processed/blind_recoding_agreement_rate.md` with the agreement-rate summary for the blind pass
 - `data/processed/implementation_status_summary.csv` generated from the original counted baseline
 - `data/processed/requirements_coded_2026.csv` with preserved baseline fields plus the July 24, 2026 coding layer
+- `data/processed/confidence_recode_summary.csv` with the evidence-quality redesign summary
+- `data/processed/confidence_collinearity_report.csv` with the status-versus-confidence diagnostic report
 - `data/processed/implementation_status_summary_2026.csv` with both the comparable 45-row summary and the full 46-row tracker summary
 - `data/processed/row_audit_2026.csv` with the Monday, July 27, 2026 review of the highest-risk row-level decisions from the July 24 pass
 - `outputs/tables/requirement_status_table_2026.csv` and `outputs/tables/summary_table_2026.csv` for export-ready tables
@@ -66,7 +69,10 @@ The project follows the paper's basic logic:
 4. Run a blind recoding pass that uses only requirement metadata during assignment and joins back the appendix status only after coding is complete.
 5. Preserve the original appendix-derived and aggregate-baseline fields.
 6. Add a separate July 24, 2026 coding layer using only official public evidence.
-7. Compare the baseline, blind recode, and 2026 update without overwriting the paper-era fields.
+7. Log requirement-level search activity in `data/raw/search_log.csv` so search breadth is auditable.
+8. Derive `sources_checked` from distinct URLs in that log instead of hand-entering counts.
+9. Apply a separate evidence-quality framework that scores confidence in the coding decision, not confidence that implementation happened.
+10. Compare the baseline, blind recode, and 2026 update without overwriting the paper-era fields.
 
 The 2026 pass uses six update categories:
 
@@ -81,6 +87,12 @@ Two guardrails shape the update:
 
 - The original paper baseline is preserved and never silently rewritten.
 - If public evidence is weak or indirect, the row is coded as `Unable to verify` or assigned lower confidence instead of being pushed into `Implemented`.
+
+The evidence-quality redesign adds one more important guardrail:
+
+- `confidence_index` is derived, not hand-entered. It is computed from `evidence_found`, `evidence_specificity`, `evidence_temporal_fit`, `search_scope`, and `sources_checked`.
+- `evidence_found` is a branch selector, not a penalty. When `evidence_found = No`, the model scores confidence in the claim that the public record appears silent after a documented search.
+- `High` on an `Unable to verify` row means the coding decision is strong because the search was broad and well logged. It does **not** mean the project is confident the requirement was not implemented.
 
 ## Policy Context for the 2026 Update
 
@@ -104,9 +116,12 @@ Current progress:
 - Original paper summary metrics regenerated from the requirement-level dataset
 - Independent blind recoding completed for all 45 counted requirements using a `2022-11-15` public-evidence cutoff
 - July 24, 2026 requirement-level coding completed in `data/processed/requirements_coded_2026.csv`
+- Evidence-quality confidence redesign completed for the 2026 update layer, with logged search activity and derived `confidence_index` values
 - 2026 summary, comparison, status-change, and confidence charts regenerated from the coded dataset
 
 ## Main Output Charts
+
+![Search scope by 2026 status](outputs/figures/search_scope_by_status_2026.png)
 
 ![Independent blind recode versus paper appendix status](outputs/figures/blind_recoding_vs_paper_appendix.png)
 
@@ -114,9 +129,11 @@ Current progress:
 
 ![Original baseline versus audited 2026 update](outputs/figures/original_vs_2026_comparison.png)
 
-![Status change matrix](outputs/figures/status_change_matrix.png)
+![Confidence index by 2026 status](outputs/figures/confidence_index_by_status_2026.png)
 
-![Verification confidence across audited 2026 coding decisions](outputs/figures/verification_confidence.png)
+![Shift from previous verification confidence to the evidence-quality confidence index](outputs/figures/confidence_index_shift.png)
+
+![Status change matrix](outputs/figures/status_change_matrix.png)
 
 ## Independent Blind Recoding Findings
 
@@ -148,7 +165,31 @@ Interpretation:
 - The public record is stronger in 2026 than it was in the original November 2022 baseline for some guidance, inventory, and workforce requirements.
 - After the row audit, more of the tracker is intentionally held at `Unable to verify` because the public evidence is broad, indirect, or not requirement-specific enough to support stronger coding.
 - Only one counted baseline row remains in `Superseded or replaced` after the audit applied a stricter standard for formal replacement or absorption.
-- The confidence mix remains intentionally cautious across the 45 counted requirements: `7` high-confidence rows, `14` medium-confidence rows, and `24` low-confidence rows.
+
+## Evidence-Quality Confidence Redesign
+
+The confidence redesign now applies to the **2026 update layer first**. It has **not yet been extended to the blind-recoding layer**.
+
+Key mechanics:
+
+- `search_log.csv` records the URLs reviewed for each requirement, along with the result of each check.
+- `sources_checked` is derived from the count of distinct URLs in `search_log.csv` for each requirement.
+- `search_scope` is then derived from that logged search breadth: `4+` distinct URLs maps to `Exhaustive`, `2-3` to `Targeted`, and `1` to `Cursory`.
+- `confidence_index` is derived from the uploaded `confidence_rules.py` framework and scores confidence in the coding decision itself.
+
+Current redesign results on the 46-row 2026 tracker:
+
+- `22` rows are now `High`
+- `24` rows are now `Medium`
+- `0` rows are now `Low`
+- `32` of `46` rows changed relative to the earlier `verification_confidence` labels
+
+Most importantly:
+
+- `12` of the `25` `Unable to verify` rows are now `High`
+- `13` of the `25` `Unable to verify` rows are now `Medium`
+
+That means the project is no longer treating `Unable to verify` as automatically weak. In this framework, `High + Unable to verify` means the public record appears silent **after a documented search**, not that implementation definitely failed.
 
 ## How to Interpret the Results
 
@@ -156,6 +197,8 @@ Interpretation:
 - `Partially implemented` means public evidence supports some but not all components of the requirement.
 - `Unable to verify` means the public evidence reviewed here was insufficient. It does **not** necessarily mean the work was not done.
 - `Superseded or replaced` means a later policy clearly replaced or absorbed the original requirement.
+- `confidence_index` measures confidence in the coding decision, not confidence that implementation happened.
+- `High + Unable to verify` means the public record appears silent after a documented search using the logged URLs for that requirement.
 
 ## Audit Note
 
@@ -194,6 +237,12 @@ That limitation matters twice in this repository:
 
 The July 24, 2026 update, as tightened by the July 27 audit, is especially conservative. In several rows, later federal AI policy clearly exists, but the public record does not cleanly prove full completion, formal replacement, or direct fulfillment of the original underlying requirement. Those rows are therefore left at `Unable to verify` unless the evidence supports a narrower partial-implementation judgment.
 
+The confidence redesign does not remove that limitation. It makes it more legible. By separating `updated_2026_status` from `confidence_index`, the repository can now distinguish:
+
+- a weakly supported positive coding claim
+- a moderately supported partial-implementation claim
+- a strongly supported conclusion that the public record is silent after a documented search
+
 ## How to Reproduce
 
 1. Create a Python environment.
@@ -216,13 +265,19 @@ python src/build_blind_recoding_artifacts.py
 python src/build_2026_update_artifacts.py
 ```
 
-6. Run the focused row audit saved on Monday, July 27, 2026:
+6. Run the 2026 evidence-quality confidence redesign:
+
+```bash
+python src/build_confidence_recode_artifacts.py
+```
+
+7. Run the focused row audit saved on Monday, July 27, 2026:
 
 ```bash
 python src/build_row_audit_2026.py
 ```
 
-7. If you want the notebook walkthrough, use the notebooks in order:
+8. If you want the notebook walkthrough, use the notebooks in order:
    - `01_build_requirement_dataset.ipynb`
    - `02_reproduce_original_results.ipynb`
    - `03_update_2026_status.ipynb`

@@ -1,0 +1,5 @@
+status,n,dominant_value,dominant_share,flagged
+Superseded or replaced,1,Medium,1.0,True
+Partially implemented,8,Medium,0.625,False
+Implemented,12,High,0.583,False
+Unable to verify,25,Medium,0.52,False
